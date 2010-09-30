@@ -1,4 +1,4 @@
-= workless
+h1. Workless
 
 This is an addon for delayed_job (2.1.0.pre2) http://github.com/collectiveidea/delayed_job/tree/v2.1.0.pre2 
 It is designed to be used when you're using Heroku as a host and have the need to do background work with delayed job but you dont want to leave the workers running all the time as it costs money.
@@ -9,14 +9,15 @@ There are already a few of these out there, notably @mtravers' cheepnis http://g
 
 This one takes bits from both and is helping me understand gem and plugin development. It's built for rails 3 on the delayed_job 2.1.0.pre2 tag but don't see why it wouldn't work on rails 2 as well as it hooks into the callbacks of the Delayed::Job ActiveRecord class to turn workers on and off based on the creation and destruction of jobs.
 
-== installation
+h2. Installation
 
 Add the gem to your Gemfile
+
 <pre>
 gem "workless"
 </pre>
 
-== Note on Patches/Pull Requests
+h2. Note on Patches/Pull Requests
  
 * Fork the project.
 * Make your feature addition or bug fix.
@@ -26,6 +27,6 @@ gem "workless"
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
-== Copyright
+h2. Copyright
 
 Copyright (c) 2010 lostboy. See LICENSE for details.
