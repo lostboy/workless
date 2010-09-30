@@ -23,7 +23,7 @@ module Delayed
         private
 
         def client
-          @client ||= Heroku::Client.new(ENV['HEROKU_USER'], ENV['HEROKU_PASSWORD'])
+          @client ||= ::Heroku::Client.new(ENV['HEROKU_USER'], ENV['HEROKU_PASSWORD'])
         end
 
       end
