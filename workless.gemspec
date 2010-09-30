@@ -17,15 +17,25 @@ Gem::Specification.new do |s|
      "README.rdoc"
   ]
   s.files = [
-    ".document",
+    ".bundle/config",
+     ".document",
      ".gitignore",
+     ".rvmrc",
+     "Gemfile",
+     "Gemfile.lock",
      "LICENSE",
      "README.rdoc",
      "Rakefile",
      "VERSION",
      "lib/workless.rb",
+     "lib/workless/railtie.rb",
+     "lib/workless/scaler.rb",
+     "lib/workless/scalers/base.rb",
+     "lib/workless/scalers/heroku.rb",
+     "lib/workless/scalers/local.rb",
      "test/helper.rb",
-     "test/test_workless.rb"
+     "test/test_workless.rb",
+     "workless.gemspec"
   ]
   s.homepage = %q{http://github.com/lostboy/workless}
   s.rdoc_options = ["--charset=UTF-8"]
