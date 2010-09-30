@@ -1,16 +1,19 @@
 require 'rubygems'
 require 'rake'
+require 'bundler'
 
 begin
   require 'jeweler'
+  
   Jeweler::Tasks.new do |gem|
     gem.name = "workless"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Use delayed job workers only when theyre needed}
+    gem.description = %Q{Extension to Delayed Job to enable workers to scale up when needed}
     gem.email = "paul.crabtree@gmail.com"
     gem.homepage = "http://github.com/lostboy/workless"
     gem.authors = ["lostboy"]
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_bundler_dependencies
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

@@ -1,0 +1,28 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    configuration (1.1.0)
+    fattr (2.1.0)
+    heroku (1.10.8)
+      json_pure (>= 1.2.0, < 1.5.0)
+      launchy (~> 0.3.2)
+      rest-client (>= 1.4.0, < 1.7.0)
+    json_pure (1.4.6)
+    launchy (0.3.7)
+      configuration (>= 0.0.5)
+      rake (>= 0.8.1)
+    mime-types (1.16)
+    rake (0.8.7)
+    rest-client (1.6.1)
+      mime-types (>= 1.16)
+    rush (0.6.7)
+      session
+    session (3.1.0)
+      fattr
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  heroku
+  rush
