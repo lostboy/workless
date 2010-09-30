@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.email = %q{paul.crabtree@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.rdoc"
+     "README.textile"
   ]
   s.files = [
     ".bundle/config",
@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
      "Gemfile",
      "Gemfile.lock",
      "LICENSE",
-     "README.rdoc",
+     "README.textile",
      "Rakefile",
      "VERSION",
      "lib/workless.rb",
