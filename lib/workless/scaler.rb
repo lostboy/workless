@@ -25,7 +25,8 @@ module Delayed
         end
 
         def scaler=(scaler)
-          @scaler = scaler
+          require File.dirname(__FILE__) + "/scalers/#{scaler.to_s}"
+          @scaler = "Delayed::Workless::Scaler::#{scaler.to_s.camelize}".constantize.new
         end
       end
       
