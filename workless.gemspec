@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{workless}
-  s.version = "0.0.3"
+  s.version = "0.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["lostboy"]
-  s.date = %q{2010-09-30}
+  s.date = %q{2010-10-01}
   s.description = %q{Extension to Delayed Job to enable workers to scale up when needed}
   s.email = %q{paul.crabtree@gmail.com}
   s.extra_rdoc_files = [
@@ -33,6 +33,7 @@ Gem::Specification.new do |s|
      "lib/workless/scalers/base.rb",
      "lib/workless/scalers/heroku.rb",
      "lib/workless/scalers/local.rb",
+     "lib/workless/scalers/null.rb",
      "test/helper.rb",
      "test/test_workless.rb",
      "workless.gemspec"
