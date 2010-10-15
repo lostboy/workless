@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{workless}
-  s.version = "0.0.4"
+  s.version = "0.0.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["lostboy"]
-  s.date = %q{2010-10-01}
+  s.date = %q{2010-10-15}
   s.description = %q{Extension to Delayed Job to enable workers to scale up when needed}
   s.email = %q{paul.crabtree@gmail.com}
   s.extra_rdoc_files = [
@@ -54,20 +54,20 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-      s.add_runtime_dependency(%q<rails>, ["= 3.0.0"])
+      s.add_runtime_dependency(%q<rails>, [">= 3.0.0"])
       s.add_runtime_dependency(%q<heroku>, ["= 1.10.8"])
       s.add_runtime_dependency(%q<rush>, ["= 0.6.7"])
       s.add_runtime_dependency(%q<delayed_job>, ["= 2.1.0.pre2"])
     else
       s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-      s.add_dependency(%q<rails>, ["= 3.0.0"])
+      s.add_dependency(%q<rails>, [">= 3.0.0"])
       s.add_dependency(%q<heroku>, ["= 1.10.8"])
       s.add_dependency(%q<rush>, ["= 0.6.7"])
       s.add_dependency(%q<delayed_job>, ["= 2.1.0.pre2"])
     end
   else
     s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-    s.add_dependency(%q<rails>, ["= 3.0.0"])
+    s.add_dependency(%q<rails>, [">= 3.0.0"])
     s.add_dependency(%q<heroku>, ["= 1.10.8"])
     s.add_dependency(%q<rush>, ["= 0.6.7"])
     s.add_dependency(%q<delayed_job>, ["= 2.1.0.pre2"])
