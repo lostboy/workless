@@ -39,7 +39,7 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     fattr (2.1.0)
-    heroku (1.10.8)
+    heroku (1.11.0)
       json_pure (>= 1.2.0, < 1.5.0)
       launchy (~> 0.3.2)
       rest-client (>= 1.4.0, < 1.7.0)
@@ -89,6 +89,6 @@ PLATFORMS
 
 DEPENDENCIES
   delayed_job (= 2.1.0.pre2)
-  heroku (= 1.10.8)
+  heroku
   rails (>= 3.0.0)
   rush (= 0.6.7)
