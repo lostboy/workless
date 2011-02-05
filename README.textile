@@ -29,10 +29,12 @@ In the case of failed jobs Workless will only shut down the dj worker if all att
 
 h2. Configuration
 
-Workless can be disabled by using the null scaler that will ignore the workers requests to scale up and down. In an environment file add this:
+Workless can be disabled by using the null scaler that will ignore the workers requests to scale up and down. In an environment file add this in the config block:
 
 <pre>
-Delayed::Job.scaler = :null
+config.after_initialize do 
+  Delayed::Job.scaler = :null
+end
 </pre>
 
 There are two other scalers included but generally these will be chosen for you based on if its running on Heroku
