@@ -38,12 +38,16 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     fattr (2.2.0)
-    heroku (1.15.0)
-      json_pure (>= 1.2.0, < 1.5.0)
+    git (1.2.5)
+    heroku (1.19.1)
+      activesupport (>= 2.1.0)
       launchy (~> 0.3.2)
       rest-client (>= 1.4.0, < 1.7.0)
     i18n (0.5.0)
-    json_pure (1.4.6)
+    jeweler (1.5.2)
+      bundler (~> 1.0.0)
+      git (>= 1.2.5)
+      rake
     launchy (0.3.7)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
@@ -79,8 +83,8 @@ GEM
       session
     session (3.1.0)
       fattr
+    shoulda (2.11.3)
     thor (0.14.6)
-    thoughtbot-shoulda (2.11.1)
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
@@ -89,8 +93,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler (~> 1.0.0)
   delayed_job (~> 2.1.0)
-  heroku
+  heroku (> 0)
+  jeweler (~> 1.5.2)
   rails (>= 3.0.0)
   rush (= 0.6.7)
-  thoughtbot-shoulda
+  shoulda
