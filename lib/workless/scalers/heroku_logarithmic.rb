@@ -27,7 +27,7 @@ module Delayed
         end
 
         def num_workers
-          1 + Math.log10(jobs.count).to_i
+          jobs.count == 0 ? 1 : 1 + Math.log10(jobs.count).to_i
         end
 
       end
