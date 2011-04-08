@@ -1,18 +1,18 @@
 module Delayed
-  module Workless 
+  module Workless
     module Scaler
-    
+
       def self.included(base)
-        
+
         base.send :extend, ClassMethods
         base.class_eval do
           after_destroy "self.class.scaler.down"
           before_create "self.class.scaler.up"
           after_update "self.class.scaler.down", :unless => Proc.new {|r| r.failed_at.nil? }
         end
-        
+
       end
-      
+
       module ClassMethods
         def scaler
           @scaler ||= if ENV.include?("HEROKU_UPID")
@@ -29,8 +29,8 @@ module Delayed
           @scaler = "Delayed::Workless::Scaler::#{scaler.to_s.camelize}".constantize.new
         end
       end
-      
+
     end
-    
+
   end
 end

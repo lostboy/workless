@@ -21,7 +21,7 @@ module Delayed
         end
 
       end
-  
+
     end
   end
 end
