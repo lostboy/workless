@@ -4,7 +4,7 @@ module Delayed
   module Workless
     module Scaler
 
-      class HerokuLogarithmic < Base
+      class HerokuLogarithmic10 < Base
 
         require "heroku"
 
@@ -27,7 +27,7 @@ module Delayed
         end
 
         def num_workers
-          jobs.count == 0 ? 1 : 1 + Math.log(jobs.count).round
+          jobs.count == 0 ? 1 : 1 + Math.log10(jobs.count).to_i
         end
 
       end
