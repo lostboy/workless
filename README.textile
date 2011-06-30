@@ -37,14 +37,17 @@ config.after_initialize do
 end
 </pre>
 
-There are two other scalers included but generally these will be chosen for you based on if its running on Heroku
+There are three other scalers included. Note that if you are running on the Aspen or Bamboo stacks on Heroku and you don't explicitly specify the scaler, the heroku scaler will be used automatically.
 
 <pre>
 Delayed::Job.scaler = :heroku
+Delayed::Job.scaler = :heroku_cedar
 Delayed::Job.scaler = :local
 </pre>
 
 The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/rush to start and stop workers on a local machine
+
+The heroku scaler works on the Aspen and Bamboo stacks while the heroku_cedar scaler only works on the new Cedar stack.
 
 h2. Note on Patches/Pull Requests
  
