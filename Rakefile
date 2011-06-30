@@ -12,7 +12,6 @@ begin
     gem.email = "paul.crabtree@gmail.com"
     gem.homepage = "http://github.com/lostboy/workless"
     gem.authors = ["lostboy"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
     gem.add_bundler_dependencies
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
