@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.files = [
     ".bundle/config",
     ".document",
-    ".rvmrc",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE",
