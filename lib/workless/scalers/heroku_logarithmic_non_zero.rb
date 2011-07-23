@@ -4,7 +4,7 @@ module Delayed
   module Workless
     module Scaler
 
-      class HerokuLogarithmic < Base
+      class HerokuLogarithmicNonZero < Base
 
         require "heroku"
 
