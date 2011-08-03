@@ -3,31 +3,26 @@ require 'heroku'
 module Delayed
   module Workless
     module Scaler
-
       class HerokuLogarithmic10 < Base
 
-        require "heroku"
+        extend Delayed::Workless::Scaler::HerokuClient
 
-        def up
-          client.set_workers(ENV['APP_NAME'], num_workers) if jobs.count > 0 && workers != num_workers
+        def self.up
+          self.client.set_workers(ENV['APP_NAME'], num_workers) if self.jobs.count > 0 && self.workers != num_workers
         end
 
-        def down
-          client.set_workers(ENV['APP_NAME'], 0) unless workers == 0 or jobs.count > 0
+        def self.down
+          self.client.set_workers(ENV['APP_NAME'], 0) unless self.workers == 0 or self.jobs.count > 0
         end
 
-        def workers
-          client.info(ENV['APP_NAME'])[:workers].to_i
+        def self.workers
+          self.client.info(ENV['APP_NAME'])[:workers].to_i
         end
 
-        private
+      private
 
-        def client
-          @client ||= ::Heroku::Client.new(ENV['HEROKU_USER'], ENV['HEROKU_PASSWORD'])
-        end
-
-        def num_workers
-          jobs.count == 0 ? 1 : 1 + Math.log10(jobs.count).to_i
+        def self.num_workers
+          self.jobs.count <= 1 ? self.jobs.count : Math.log10(self.jobs.count).round
         end
 
       end

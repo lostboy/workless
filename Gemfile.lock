@@ -35,14 +35,20 @@ GEM
     delayed_job (2.1.4)
       activesupport (~> 3.0)
       daemons
+    diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     fattr (2.2.0)
+    git (1.2.5)
     heroku (2.3.6)
       launchy (>= 0.3.2)
       rest-client (~> 1.6.1)
       term-ansicolor (~> 1.0.5)
     i18n (0.5.0)
+    jeweler (1.6.4)
+      bundler (~> 1.0)
+      git (>= 1.2.5)
+      rake
     launchy (0.4.0)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
@@ -76,6 +82,14 @@ GEM
     rdoc (3.8)
     rest-client (1.6.3)
       mime-types (>= 1.16)
+    rspec (2.5.0)
+      rspec-core (~> 2.5.0)
+      rspec-expectations (~> 2.5.0)
+      rspec-mocks (~> 2.5.0)
+    rspec-core (2.5.2)
+    rspec-expectations (2.5.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.5.0)
     rush (0.6.7)
       session
     session (3.1.0)
@@ -92,5 +106,7 @@ PLATFORMS
 DEPENDENCIES
   delayed_job (~> 2.1.0)
   heroku
+  jeweler
   rails (>= 3.0.0)
+  rspec
   rush (= 0.6.7)
