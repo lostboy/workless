@@ -6,8 +6,8 @@ module Delayed
 
       class Local < Base
 
-        def up
-          Rush::Box.new[Rails.root].bash("rake jobs:work", :background => true) if workers == 0
+        def self.up
+          Rush::Box.new[Rails.root].bash("rake jobs:work", :background => true) if self.workers == 0
           true
         end
 
@@ -16,7 +16,7 @@ module Delayed
           true
         end
 
-        def workers
+        def self.workers
           Rush::Box.new.processes.filter(:cmdline => /rake jobs:work/).size
         end
 
