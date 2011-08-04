@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
     "README.textile"
   ]
   s.files = [
-    ".bundle/config",
     ".document",
     "Gemfile",
     "Gemfile.lock",
