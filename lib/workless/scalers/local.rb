@@ -9,7 +9,7 @@ module Delayed
         def up
           if workers == 0
             Rush::Box.new[Rails.root].bash("rake jobs:work", :background => true)
-          elsif workers < 2 and jobs.count > 500
+          elsif workers < 2 and jobs.count > 200
             for i in (1..10)
               Rush::Box.new[Rails.root].bash("rake jobs:work", :background => true)
             end

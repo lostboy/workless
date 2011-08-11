@@ -11,7 +11,7 @@ module Delayed
         def up
           if workers == 0
             client.set_workers(ENV['APP_NAME'], 1)
-          elsif workers < 2 and jobs.count > 500
+          elsif workers < 2 and jobs.count > 200
             client.set_workers(ENV['APP_NAME'], 10)
           end
         end
