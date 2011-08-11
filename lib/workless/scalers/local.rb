@@ -7,7 +7,14 @@ module Delayed
       class Local < Base
 
         def up
-          Rush::Box.new[Rails.root].bash("rake jobs:work", :background => true) if workers == 0
+          if workers == 0
+            Rush::Box.new[Rails.root].bash("rake jobs:work", :background => true)
+          elsif workers < 2 and jobs.count > 500
+            for i in (1..10)
+              Rush::Box.new[Rails.root].bash("rake jobs:work", :background => true)
+            end
+          end
+          
           true
         end
 
