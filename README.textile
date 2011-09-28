@@ -23,6 +23,12 @@ Add your Heroku username / password as config vars to your Heroku instance, the 
 heroku config:add HEROKU_USER=<your username> HEROKU_PASSWORD=<your password>
 </pre>
 
+And for cedar apps add the app name
+
+<pre>
+heroku config:add APP_NAME=<your app name>
+</pre>
+
 h2. Failing Jobs
 
 In the case of failed jobs Workless will only shut down the dj worker if all attempts have been tried. By default Delayed Job will try 25 times to process a job with ever increasing time delays between each unsucessful attempt. Because of this Workless configures Delayed Job to try failed jobs only 3 times to reduce the amount of time a worker can be running while trying to process them.
