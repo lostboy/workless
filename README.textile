@@ -1,6 +1,6 @@
 h1. Workless
 
-This is an addon for delayed_job (2.1.0.pre2) http://github.com/collectiveidea/delayed_job/tree/v2.1.0.pre2 
+This is an addon for delayed_job (2.1.0.pre2) http://github.com/collectiveidea/delayed_job/tree/v2.1.0.pre2
 It is designed to be used when you're using Heroku as a host and have the need to do background work with delayed job but you dont want to leave the workers running all the time as it costs money.
 
 You basically add the gem to your project and the rest is taken care of for you given a few CONFIG vars set on Heroku.
@@ -38,7 +38,7 @@ h2. Configuration
 Workless can be disabled by using the null scaler that will ignore the workers requests to scale up and down. In an environment file add this in the config block:
 
 <pre>
-config.after_initialize do 
+config.after_initialize do
   Delayed::Job.scaler = :null
 end
 </pre>
@@ -55,8 +55,59 @@ The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/ru
 
 The heroku scaler works on the Aspen and Bamboo stacks while the heroku_cedar scaler only works on the new Cedar stack.
 
+h2. Creating Custom Scalers
+
+You can also define your own scalers. You can define a scaler simply by creating a class under the <code>Delayed::Workless::Scaler</code> module namespace, implement the <code>.up</code> and the <code>.down</code> class methods and you should be good to go.
+
+Two additional notes:
+1. It's probably a good idea to have your scaler inherit from <code>Delayed::Workless::Scaler::Base</code>
+2. If you need to communicate with heroku (which you probably will), you will have to extend your class with <code>Delayed::Workless::Scalar::HerokuClient</code>
+
+Below is a simple example of how you can use it in Rails:
+
+<pre>
+# lib/delayed/workless/scaler/super_duper_random.rb
+#   or
+# config/initializers/scalers.rb
+module Delayed
+  module Workless
+    module Scaler
+      class SuperDuperRandom < Base
+
+        extend Delayed::Workless::Scaler::HerokuClient
+
+        def self.up
+          client.set_workers(ENV['APP_NAME'], rand(24))
+        end
+
+        def self.down
+          client.set_workers(0)
+        end
+
+      end
+    end
+  end
+end
+</pre>
+
+Once that is defined, you can simply assign the worker to workless
+
+<pre>
+# config/environments/production.rb
+Delayed::Job.scaler = :super_duper_random
+</pre>
+
+h2. Running tests
+
+You can run the tests by running the following:
+
+<pre>
+bundle install
+bundle exec rake spec
+</pre>
+
 h2. Note on Patches/Pull Requests
- 
+
 * Please fork the project, as you can see there are no tests and at present I don't know how to go about adding them so any advice would be welcome.
 * Make your feature addition or bug fix.
 * Commit, do not mess with rakefile, version, or history.
