@@ -4,10 +4,10 @@ module Delayed
 
       class Null < Base
       
-        def up
+        def self.up
         end
 
-        def down
+        def self.down
         end
 
       end
