@@ -6,7 +6,7 @@ module Delayed
   
       class Base
         def jobs
-          Delayed::Job.where(:failed_at => nil)
+          Delayed::Job.all(:conditions => { :failed_at => nil })
         end
       end
   

@@ -45,21 +45,21 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rails>, [">= 3.0.0"])
-      s.add_runtime_dependency(%q<heroku>, [">= 0"])
-      s.add_runtime_dependency(%q<rush>, ["= 0.6.7"])
-      s.add_runtime_dependency(%q<delayed_job>, ["~> 2.1.0"])
+      s.add_runtime_dependency(%q<rails>)
+      s.add_runtime_dependency(%q<heroku>)
+      s.add_runtime_dependency(%q<rush>)
+      s.add_runtime_dependency(%q<delayed_job>, [">= 2.0.7"])
     else
-      s.add_dependency(%q<rails>, [">= 3.0.0"])
-      s.add_dependency(%q<heroku>, [">= 0"])
-      s.add_dependency(%q<rush>, ["= 0.6.7"])
-      s.add_dependency(%q<delayed_job>, ["~> 2.1.0"])
+      s.add_dependency(%q<rails>)
+      s.add_dependency(%q<heroku>)
+      s.add_dependency(%q<rush>)
+      s.add_dependency(%q<delayed_job>, [">= 2.0.7"])
     end
   else
-    s.add_dependency(%q<rails>, [">= 3.0.0"])
-    s.add_dependency(%q<heroku>, [">= 0"])
-    s.add_dependency(%q<rush>, ["= 0.6.7"])
-    s.add_dependency(%q<delayed_job>, ["~> 2.1.0"])
+    s.add_dependency(%q<rails>)
+    s.add_dependency(%q<heroku>)
+    s.add_dependency(%q<rush>)
+    s.add_dependency(%q<delayed_job>, [">= 2.0.7"])
   end
 end
 

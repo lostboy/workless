@@ -12,7 +12,7 @@ module Delayed
         end
 
         def down
-          Rush::Box.new.processes.filter(:cmdline => /rake jobs:work/).kill unless workers == 0 or jobs.count > 0
+          $exit = true unless jobs.count > 0
           true
         end
 
