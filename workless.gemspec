@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.description = %q{Extension to Delayed Job to enable workers to scale up when needed}
   s.email = %q{paul.crabtree@gmail.com}
   
-  s.files = Dir.glob("{rails,lib}/**/*") + %w(LICENSE README.textile)
+  s.files = Dir.glob("{rails,lib}/**/*") + %w(LICENSE README.md)
   
   s.homepage = %q{http://github.com/lostboy/workless}
   s.require_paths = ["lib"]
