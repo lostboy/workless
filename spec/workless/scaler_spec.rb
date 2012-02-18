@@ -33,11 +33,11 @@ describe Delayed::Workless::Scaler do
     context 'with a known scaler' do
 
       before do
-        Delayed::Job::Mock.scaler = :heroku_logarithmic
+        Delayed::Job::Mock.scaler = :heroku_cedar
       end
 
       it 'should be properly assigned' do
-        Delayed::Job::Mock.scaler.should == Delayed::Workless::Scaler::HerokuLogarithmic
+        Delayed::Job::Mock.scaler.should == Delayed::Workless::Scaler::HerokuCedar
       end
 
     end

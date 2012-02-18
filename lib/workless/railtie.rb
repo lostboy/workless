@@ -1,12 +1,10 @@
 require 'rails'
+require 'delayed_job'
 
 module Delayed
   class Railtie < Rails::Railtie
     initializer :after_initialize do
-      Delayed::Worker.max_attempts = 3
-      [ Delayed::Backend::ActiveRecord::Job, Delayed::Backend::Mongoid::Job ].each do |klass|
-        klass.send(:include, Delayed::Workless::Scaler) if defined?(klass)
-      end
+      require 'workless/initialize'
     end
   end
 end

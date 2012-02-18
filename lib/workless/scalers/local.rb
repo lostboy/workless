@@ -11,7 +11,7 @@ module Delayed
           true
         end
 
-        def down
+        def self.down
           $exit = true unless jobs.count > 0
           true
         end
