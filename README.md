@@ -11,6 +11,16 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 Version 1.0.0 has been released, this brings compatibility with delayed_job 3 and compatibility with Rails 2.3.x and up.
 
+## Compatibility
+
+Workless should work correctly with Rubies 1.8.7, ree, 1.9.2 and 1.9.3. It is compatible with Delayed Job since version 2.0.7 up to the latest version 3.0.1, the table below shows tested compatibility with ruby, rails and delayed_job
+
+Ruby | Rails  | Delayed Job
+---------- | ------ | -----
+1.8.7-ree  | 2.1.14 | 2.0.7
+1.9.2      | 3.2    | 2.1.4
+1.9.2      | 3.2    | 3.0.1
+
 ## Installation
 
 Add the workless gem and the delayed_job gem to your project Gemfile and update your bundle. Its is recommended to specify the gem version for delayed_job especially if you are using rails 2.3.x which doesn't work with the latest delayed_job
