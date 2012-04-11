@@ -13,6 +13,9 @@ tmtags
 ## VIM
 *.swp
 
+## Bundler
+.bundle
+
 ## PROJECT::GENERAL
 coverage
 rdoc

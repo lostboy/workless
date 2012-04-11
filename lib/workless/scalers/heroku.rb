@@ -6,7 +6,7 @@ module Delayed
 
       class Heroku < Base
 
-        require "heroku"
+        extend Delayed::Workless::Scaler::HerokuClient
 
         def up
           w = workers
@@ -21,14 +21,8 @@ module Delayed
           client.set_workers(ENV['APP_NAME'], 0) unless jobs.count > 0
         end
 
-        def workers
+        def self.workers
           client.info(ENV['APP_NAME'])[:workers].to_i
-        end
-
-        private
-
-        def client
-          @client ||= ::Heroku::Client.new(ENV['HEROKU_USER'], ENV['HEROKU_PASSWORD'])
         end
 
       end

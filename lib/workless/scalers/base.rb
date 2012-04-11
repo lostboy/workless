@@ -5,11 +5,20 @@ module Delayed
     module Scaler
   
       class Base
-        def jobs
-          Delayed::Job.where(:failed_at => nil)
+        def self.jobs
+          Delayed::Job.all(:conditions => { :failed_at => nil })
         end
       end
-  
+
+      module HerokuClient
+        require 'heroku'
+
+        def client
+          @client ||= ::Heroku::Client.new(ENV['HEROKU_USER'], ENV['HEROKU_PASSWORD'])
+        end
+
+      end
+
     end
   end
 end
