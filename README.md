@@ -48,7 +48,8 @@ gem "workless", "~> 1.0.1"
 
 If you don't specify delayed_job in your Gemfile workless will bring it in, most likly the latest version (3.0.1)
 
-Add your Heroku username / password as config vars to your Heroku instance, the same one you log in to Heroku with
+Add your Heroku username / password as config vars to your Heroku instance, the same one you log in to Heroku with.
+[You may also use your API key as the password](https://github.com/heroku/heroku/issues/103).
 
 <pre>
 heroku config:add HEROKU_USER=yourusername HEROKU_PASSWORD=yourpassword
