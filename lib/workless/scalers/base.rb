@@ -11,7 +11,6 @@ module Delayed
       end
 
       module HerokuClient
-        require 'heroku'
 
         def client
           @client ||= ::Heroku::Client.new(ENV['HEROKU_USER'], ENV['HEROKU_PASSWORD'])
