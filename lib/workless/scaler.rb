@@ -19,7 +19,7 @@ module Delayed
       
       module ClassMethods
         def scaler
-          @scaler ||= if ENV.include?("HEROKU_UPID")
+          @scaler ||= if ENV.include?("HEROKU_USER")
             client = ::Heroku::Client.new(ENV['HEROKU_USER'], ENV['HEROKU_PASSWORD'])
             case client.info(ENV["APP_NAME"])[:stack]
             when "cedar"
