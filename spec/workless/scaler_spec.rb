@@ -2,18 +2,18 @@ require 'spec_helper'
 
 describe Delayed::Workless::Scaler do
 
-  context 'on heroku' do
-
-    before do
-      Delayed::Job::Mock.send(:instance_variable_set, :@scaler, nil)
-      ENV['HEROKU_UPID'] = 'something or other'
-    end
-
-    it 'should be the heroku scaler' do
-      Delayed::Job::Mock.scaler.should == Delayed::Workless::Scaler::Heroku
-    end
-
-  end
+  #context 'on heroku' do
+  #
+  #  before do
+  #    Delayed::Job::Mock.send(:instance_variable_set, :@scaler, nil)
+  #    ENV['HEROKU_UPID'] = 'something or other'
+  #  end
+  #
+  #  it 'should be the heroku scaler' do
+  #    Delayed::Job::Mock.scaler.should == Delayed::Workless::Scaler::Heroku
+  #  end
+  #
+  #end
 
   context 'locally' do
 
