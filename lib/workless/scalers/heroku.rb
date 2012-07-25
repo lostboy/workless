@@ -8,12 +8,17 @@ module Delayed
 
         extend Delayed::Workless::Scaler::HerokuClient
 
-        def self.up
-          client.set_workers(ENV['APP_NAME'], 1) if self.workers == 0
+        def up
+          w = workers
+          if w == 0
+            client.set_workers(ENV['APP_NAME'], 1)
+          elsif w < 2 and jobs.count > 200
+            client.set_workers(ENV['APP_NAME'], 10)
+          end
         end
 
-        def self.down
-          client.set_workers(ENV['APP_NAME'], 0) unless self.workers == 0 or self.jobs.count > 0
+        def down
+          client.set_workers(ENV['APP_NAME'], 0) unless jobs.count > 0
         end
 
         def self.workers
