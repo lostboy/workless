@@ -15,7 +15,7 @@ module Delayed
         end
 
         def self.workers
-          client.get_ps(ENV['APP_NAME']).count { |p| p["process"] =~ /worker\.\d?/ }
+          client.get_ps(ENV['APP_NAME']).body.count { |p| p["process"] =~ /worker\.\d?/ }
         end
 
         # Returns the number of workers needed based on the current number of pending jobs and the settings defined by:
