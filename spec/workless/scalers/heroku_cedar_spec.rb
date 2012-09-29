@@ -18,7 +18,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
       end
 
       it 'should set the workers to 1' do
-        Delayed::Workless::Scaler::HerokuCedar.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], :qty => 1, :type => 'worker')
+        Delayed::Workless::Scaler::HerokuCedar.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], 'worker', 1)
         Delayed::Workless::Scaler::HerokuCedar.up
       end
 
@@ -65,7 +65,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
       end
 
       it 'should set the workers to 0' do
-        Delayed::Workless::Scaler::HerokuCedar.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], :qty => 0, :type => 'worker')
+        Delayed::Workless::Scaler::HerokuCedar.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], 'worker', 0)
         Delayed::Workless::Scaler::HerokuCedar.down
       end
 

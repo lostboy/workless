@@ -185,7 +185,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
   end
 
   def should_scale_workers_to(num)
-    Delayed::Workless::Scaler::HerokuCedar.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], :qty => num, :type => 'worker')
+    Delayed::Workless::Scaler::HerokuCedar.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], 'worker', num)
   end
 
   def should_not_scale_workers
