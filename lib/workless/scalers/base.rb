@@ -13,7 +13,7 @@ module Delayed
       module HerokuClient
 
         def client
-          @client ||= ::Heroku::API.new(:api_key => ENV['HEROKU_APIKEY'])
+          @client ||= ::Heroku::API.new(:api_key => ENV['HEROKU_API_KEY'])
         end
 
       end

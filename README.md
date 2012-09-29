@@ -51,7 +51,7 @@ If you don't specify delayed_job in your Gemfile workless will bring it in, most
 Add your Heroku app name / [API key](https://devcenter.heroku.com/articles/authentication) as config vars to your Heroku instance.
 
 <pre>
-heroku config:add HEROKU_APIKEY=yourapikey APP_NAME=yourherokuappname
+heroku config:add HEROKU_API_KEY=yourapikey APP_NAME=yourherokuappname
 </pre>
 
 ## Failing Jobs

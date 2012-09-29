@@ -19,7 +19,7 @@ module Delayed
       
       module ClassMethods
         def scaler
-          @scaler ||= if ENV.include?("HEROKU_APIKEY")
+          @scaler ||= if ENV.include?("HEROKU_API_KEY")
             Scaler::HerokuCedar
           else
             Scaler::Local
