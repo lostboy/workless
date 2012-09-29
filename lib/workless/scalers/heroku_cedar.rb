@@ -1,27 +1,49 @@
-require 'heroku'
+require 'heroku-api'
 
 module Delayed
   module Workless
     module Scaler
-
       class HerokuCedar < Base
-
         extend Delayed::Workless::Scaler::HerokuClient
 
         def self.up
-          client.ps_scale(ENV['APP_NAME'], :type => 'worker', :qty => 1) if self.workers == 0
+          client.post_ps_scale(ENV['APP_NAME'], 'worker', self.workers_needed) if self.workers < self.workers_needed
         end
 
         def self.down
-          client.ps_scale(ENV['APP_NAME'], :type => 'worker', :qty => 0) unless self.workers == 0 or self.jobs.count > 0
+          client.post_ps_scale(ENV['APP_NAME'], 'worker', self.min_workers) unless self.workers == self.min_workers or self.jobs.count > 0
         end
 
         def self.workers
-          client.ps(ENV['APP_NAME']).count { |p| p["process"] =~ /worker\.\d?/ }
+          client.get_ps(ENV['APP_NAME']).body.count { |p| p["process"] =~ /worker\.\d?/ }
         end
 
-      end
+        # Returns the number of workers needed based on the current number of pending jobs and the settings defined by:
+        #
+        # ENV['WORKLESS_WORKERS_RATIO']
+        # ENV['WORKLESS_MAX_WORKERS']
+        # ENV['WORKLESS_MIN_WORKERS']
+        #
+        def self.workers_needed
+          [[(self.jobs.count.to_f / self.workers_ratio).ceil, self.max_workers].min, self.min_workers].max
+        end
 
+        def self.workers_ratio
+          if ENV['WORKLESS_WORKERS_RATIO'].present? && (ENV['WORKLESS_WORKERS_RATIO'].to_i != 0)
+            ENV['WORKLESS_WORKERS_RATIO'].to_i
+          else
+            100
+          end
+        end
+
+        def self.max_workers
+          ENV['WORKLESS_MAX_WORKERS'].present? ? ENV['WORKLESS_MAX_WORKERS'].to_i : 1
+        end
+
+        def self.min_workers
+          ENV['WORKLESS_MIN_WORKERS'].present? ? ENV['WORKLESS_MIN_WORKERS'].to_i : 0
+        end
+      end
     end
   end
 end
