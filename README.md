@@ -7,9 +7,10 @@ It is designed to be used when you're using Heroku as a host and have the need t
 
 By adding the gem to your project and configuring our Heroku app with some config variables workless should do the rest.
 
-## Update
+## Updates
 
-Version 1.0.0 has been released, this brings compatibility with delayed_job 3 and compatibility with Rails 2.3.x and up.
+* Version 1.1.0 has been released, this adds support for scaling using multiple workers thanks to @jaimeiniesta and @davidakachaos.
+* Version 1.0.0 has been released, this brings compatibility with delayed_job 3 and compatibility with Rails 2.3.x and up.
 
 ## Compatibility
 
