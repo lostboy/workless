@@ -15,7 +15,7 @@ describe Delayed::Workless::Scaler::Heroku do
       end
 
       it 'should set the workers to 1' do
-        Delayed::Workless::Scaler::Heroku.client.should_receive(:set_workers).once.with(ENV['APP_NAME'], 1)
+        Delayed::Workless::Scaler::Heroku.client.should_receive(:put_workers).once.with(ENV['APP_NAME'], 1)
         Delayed::Workless::Scaler::Heroku.up
       end
 
@@ -28,7 +28,7 @@ describe Delayed::Workless::Scaler::Heroku do
       end
 
       it 'should not set anything' do
-        Delayed::Workless::Scaler::Heroku.client.should_not_receive(:set_workers)
+        Delayed::Workless::Scaler::Heroku.client.should_not_receive(:put_workers)
         Delayed::Workless::Scaler::Heroku.up
       end
 
@@ -49,7 +49,7 @@ describe Delayed::Workless::Scaler::Heroku do
       end
 
       it 'should not set anything' do
-        Delayed::Workless::Scaler::Heroku.client.should_not_receive(:set_workers)
+        Delayed::Workless::Scaler::Heroku.client.should_not_receive(:put_workers)
         Delayed::Workless::Scaler::Heroku.down
       end
 
@@ -62,7 +62,7 @@ describe Delayed::Workless::Scaler::Heroku do
       end
 
       it 'should set the workers to 0' do
-        Delayed::Workless::Scaler::Heroku.client.should_receive(:set_workers).once.with(ENV['APP_NAME'], 0)
+        Delayed::Workless::Scaler::Heroku.client.should_receive(:put_workers).once.with(ENV['APP_NAME'], 0)
         Delayed::Workless::Scaler::Heroku.down
       end
 

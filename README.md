@@ -48,17 +48,10 @@ gem "workless", "~> 1.0.1"
 
 If you don't specify delayed_job in your Gemfile workless will bring it in, most likly the latest version (3.0.1)
 
-Add your Heroku username / password as config vars to your Heroku instance, the same one you log in to Heroku with.
-[You may also use your API key as the password](https://github.com/heroku/heroku/issues/103).
+Add your Heroku app name / [API key](https://devcenter.heroku.com/articles/authentication) as config vars to your Heroku instance.
 
 <pre>
-heroku config:add HEROKU_USER=yourusername HEROKU_PASSWORD=yourpassword
-</pre>
-
-And for cedar apps add the app name
-
-<pre>
-heroku config:add APP_NAME=yourherokuappname
+heroku config:add HEROKU_API_KEY=yourapikey APP_NAME=yourherokuappname
 </pre>
 
 ## Failing Jobs
@@ -87,9 +80,21 @@ The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/ru
 
 The heroku scaler works on the Aspen and Bamboo stacks while the heroku_cedar scaler only works on the new Cedar stack.
 
+## Scaling to multiple workers
+
+As an experimental feature for the Cedar stack, Workless can scale to more than 1 worker based on the current work load. You just need to define these config variables on your app, setting the values you want:
+
+<pre>
+heroku config:add WORKLESS_MAX_WORKERS=10
+heroku config:add WORKLESS_MIN_WORKERS=0
+heroku config:add WORKLESS_WORKERS_RATIO=50
+</pre>
+
+In this example, it will scale up to a maximum of 10 workers, firing up 1 worker for every 50 jobs on the queue. The minimum will be 0 workers, but you could set it to a higher value if you want.
+
 ## Note on Patches/Pull Requests
  
-* Please fork the project, as you can see there are no tests and at present I don't know how to go about adding them so any advice would be welcome.
+* Please fork the project.
 * Make your feature addition or bug fix.
 * Commit, do not mess with rakefile, version, or history.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
