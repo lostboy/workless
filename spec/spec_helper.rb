@@ -11,7 +11,7 @@ module Delayed
       def self.after_destroy(method, *args)
       end
 
-      def self.before_create(method, *args)
+      def self.after_create(method, *args)
       end
 
       def self.after_update(method, *args)
