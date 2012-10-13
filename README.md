@@ -9,6 +9,7 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Updates
 
+* Version 1.1.1 includes a fix from @filiptepper and @fixr to correctly scale workers
 * Version 1.1.0 has been released, this adds support for scaling using multiple workers thanks to @jaimeiniesta and @davidakachaos.
 * Version 1.0.0 has been released, this brings compatibility with delayed_job 3 and compatibility with Rails 2.3.x and up.
 
@@ -30,21 +31,21 @@ Add the workless gem and the delayed_job gem to your project Gemfile and update 
 
 <pre>
 gem "delayed_job", "2.0.7"
-gem "workless", "~> 1.1.0"
+gem "workless", "~> 1.1.1"
 </pre>
 
 ### For rails 3.x with delayed_job 2.1.x
 
 <pre>
 gem "delayed_job", "~> 2.1.4"
-gem "workless", "~> 1.1.0"
+gem "workless", "~> 1.1.1"
 </pre>
 
 ### For rails 3.x with latest delayed_job 3.x using active record
 
 <pre>
 gem "delayed_job_active_record"
-gem "workless", "~> 1.1.0"
+gem "workless", "~> 1.1.1"
 </pre>
 
 If you don't specify delayed_job in your Gemfile workless will bring it in, most likly the latest version (3.0.1)
