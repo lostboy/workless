@@ -8,13 +8,7 @@ require 'workless'
 module Delayed
   module Job
     class Delayed::Job::Mock
-      def self.after_destroy(method, *args)
-      end
-
-      def self.after_create(method, *args)
-      end
-
-      def self.after_update(method, *args)
+      def self.after_commit(method, *args, &block)
       end
     end
   end
