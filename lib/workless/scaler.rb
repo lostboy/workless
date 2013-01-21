@@ -10,9 +10,9 @@ module Delayed
       def self.included(base)
         base.send :extend, ClassMethods
         base.class_eval do
-          after_destroy "self.class.scaler.down"
-          after_create "self.class.scaler.up"
-          after_update "self.class.scaler.down", :unless => Proc.new {|r| r.failed_at.nil? }
+          after_commit "self.class.scaler.down", :on => :destroy
+          after_commit "self.class.scaler.up", :on => :create
+          after_commit "self.class.scaler.down", :on => :update, :unless => Proc.new {|r| r.failed_at.nil? }
         end
 
       end
