@@ -9,6 +9,7 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Updates
 
+* Version 1.1.2 includes a change by @davidakachaos to scale workers using after_commit
 * Version 1.1.1 includes a fix from @filiptepper and @fixr to correctly scale workers
 * Version 1.1.0 has been released, this adds support for scaling using multiple workers thanks to @jaimeiniesta and @davidakachaos.
 * Version 1.0.0 has been released, this brings compatibility with delayed_job 3 and compatibility with Rails 2.3.x and up.
