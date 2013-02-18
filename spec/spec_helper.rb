@@ -24,6 +24,17 @@ class NumWorkers
   end
 end
 
+class FutureJob
+  def run_at
+    Time.now + 1000 * 60 * 60
+  end
+
+  def count
+    0
+  end
+end
+
+
 Delayed::Job::Mock.send(:include, Delayed::Workless::Scaler)
 
 ENV['APP_NAME'] = 'TestHerokuApp'

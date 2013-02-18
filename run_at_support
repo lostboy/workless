@@ -1,0 +1,200 @@
+From 70535ccae1746e75d8e78cb7577b748ac018749f Mon Sep 17 00:00:00 2001
+From: David Westerink <davidakachaos@gmail.com>
+Date: Mon, 18 Feb 2013 13:13:05 +0100
+Subject: [PATCH] run_at support !!DROPS Rails 2.3 support!!
+
+This change drops Rails 2.3 support!
+
+Delayed Job supports scheduling jobs in the future with the run_at attribute. To support this in Workless, I've created a middleware to check if there are pending jobs to run.
+
+Because we need to check outside of the normal way for pending jobs, the middleware runs on every request. When we see there are pending jobs, we scale the workers up.
+
+The Rails 2.3 support is dropped in the scalers/base.rb file, I used the arel query interface to check for pending jobs.
+
+This will mean a major version bump to 2.x imho.
+
+Signed-off-by: David Westerink <davidakachaos@gmail.com>
+---
+ lib/workless.rb                             |  3 +-
+ lib/workless/middleware/workless_checker.rb | 37 ++++++++++++++++++++++++
+ lib/workless/railtie.rb                     |  3 +-
+ lib/workless/scaler.rb                      |  2 +-
+ lib/workless/scalers/base.rb                |  2 +-
+ spec/spec_helper.rb                         | 11 +++++++
+ spec/workless/scalers/run_at_spec.rb        | 45 +++++++++++++++++++++++++++++
+ 7 files changed, 99 insertions(+), 4 deletions(-)
+ create mode 100644 lib/workless/middleware/workless_checker.rb
+ create mode 100644 spec/workless/scalers/run_at_spec.rb
+
+diff --git a/lib/workless.rb b/lib/workless.rb
+index f9d35d3..c59e10f 100644
+--- a/lib/workless.rb
++++ b/lib/workless.rb
+@@ -1,4 +1,5 @@
+ require "heroku-api"
+ require File.dirname(__FILE__) + "/workless/scalers/base"
+ require File.dirname(__FILE__) + "/workless/scaler"
+-require File.dirname(__FILE__) + "/workless/railtie" if defined?(Rails::Railtie)
+\ No newline at end of file
++require File.dirname(__FILE__) + "/workless/middleware/workless_checker" if defined?(Rails::Railtie)
++require File.dirname(__FILE__) + "/workless/railtie" if defined?(Rails::Railtie)
+diff --git a/lib/workless/middleware/workless_checker.rb b/lib/workless/middleware/workless_checker.rb
+new file mode 100644
+index 0000000..201c074
+--- /dev/null
++++ b/lib/workless/middleware/workless_checker.rb
+@@ -0,0 +1,37 @@
++class WorklessChecker
++  def initialize(app)
++    @app = app
++  end
++
++  def call(env)
++    status, headers, response = @app.call(env)
++    return [status, headers, response] if file?(headers) || empty?(response)
++
++    Delayed::Job.scaler.up if Delayed::Job.scaler.jobs.size > 0
++    response_body = nil
++    if status == 200 && !response.body.frozen? && html_request?(headers, response)
++      response_body = response.body << "\n<!-- workless jobs: #{Delayed::Job.scaler.jobs.size} -->"
++      headers['Content-Length'] = response_body.bytesize.to_s
++    end
++
++    return [status, headers, response_body ? [response_body] : response]
++  end
++
++  # fix issue if response's body is a Proc
++  def empty?(response)
++    # response may be ["Not Found"], ["Move Permanently"], etc.
++    (response.is_a?(Array) && response.size <= 1) ||
++      !response.respond_to?(:body) ||
++      !response.body.respond_to?(:empty?) ||
++      response.body.empty?
++  end
++
++  # if send file?
++  def file?(headers)
++    headers["Content-Transfer-Encoding"] == "binary"
++  end
++
++  def html_request?(headers, response)
++    headers['Content-Type'] && headers['Content-Type'].include?('text/html') && response.body.include?("<html")
++  end
++end
+diff --git a/lib/workless/railtie.rb b/lib/workless/railtie.rb
+index 660fc5b..3564015 100644
+--- a/lib/workless/railtie.rb
++++ b/lib/workless/railtie.rb
+@@ -3,8 +3,9 @@ require 'delayed_job'
+ 
+ module Delayed
+   class Railtie < Rails::Railtie
+-    initializer :after_initialize do
++    initializer :after_initialize do |config|
+       require 'workless/initialize'
++      config.middleware.use "WorklessChecker"
+     end
+   end
+ end
+diff --git a/lib/workless/scaler.rb b/lib/workless/scaler.rb
+index 1704886..339b9cc 100644
+--- a/lib/workless/scaler.rb
++++ b/lib/workless/scaler.rb
+@@ -11,7 +11,7 @@ module Delayed
+         base.send :extend, ClassMethods
+         base.class_eval do
+           after_commit "self.class.scaler.down", :on => :destroy
+-          after_commit "self.class.scaler.up", :on => :create
++          after_commit "self.class.scaler.up", :on => :create, :unless => Proc.new {|r| r.run_at.future? }
+           after_commit "self.class.scaler.down", :on => :update, :unless => Proc.new {|r| r.failed_at.nil? }
+         end
+ 
+diff --git a/lib/workless/scalers/base.rb b/lib/workless/scalers/base.rb
+index 1816b0d..1394472 100644
+--- a/lib/workless/scalers/base.rb
++++ b/lib/workless/scalers/base.rb
+@@ -6,7 +6,7 @@ module Delayed
+   
+       class Base
+         def self.jobs
+-          Delayed::Job.all(:conditions => { :failed_at => nil })
++          Delayed::Job.where(failed_at: nil).where("run_at < ?", Time.now)
+         end
+       end
+ 
+diff --git a/spec/spec_helper.rb b/spec/spec_helper.rb
+index 7c51061..3949181 100644
+--- a/spec/spec_helper.rb
++++ b/spec/spec_helper.rb
+@@ -24,6 +24,17 @@ class NumWorkers
+   end
+ end
+ 
++class FutureJob
++  def run_at
++    Time.now + 1000 * 60 * 60
++  end
++
++  def count
++    0
++  end
++end
++
++
+ Delayed::Job::Mock.send(:include, Delayed::Workless::Scaler)
+ 
+ ENV['APP_NAME'] = 'TestHerokuApp'
+diff --git a/spec/workless/scalers/run_at_spec.rb b/spec/workless/scalers/run_at_spec.rb
+new file mode 100644
+index 0000000..69658d9
+--- /dev/null
++++ b/spec/workless/scalers/run_at_spec.rb
+@@ -0,0 +1,45 @@
++require 'spec_helper'
++
++describe Delayed::Workless::Scaler::HerokuCedar do
++  context 'with no workers' do
++    before(:each) do
++      Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).and_return(0)
++    end
++    context "with jobs" do
++      context "run_at in the past" do
++        it 'should set workers to 1 for 1 job' do
++          if_there_are_jobs       1
++          should_scale_workers_to 1
++
++          Delayed::Workless::Scaler::HerokuCedar.up
++        end
++      end
++      context "run_at in the future" do
++        it 'should set workers to 0 for 1 job' do
++          if_there_are_future_jobs       1
++          should_not_scale_workers
++
++          Delayed::Workless::Scaler::HerokuCedar.up
++        end
++      end
++    end
++  end
++
++  private
++
++  def if_there_are_jobs(num)
++    Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).any_number_of_times.and_return(NumWorkers.new(num))
++  end
++
++  def if_there_are_future_jobs(num)
++    Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).any_number_of_times.and_return(FutureJob.new)
++  end
++
++  def should_scale_workers_to(num)
++    Delayed::Workless::Scaler::HerokuCedar.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], 'worker', num)
++  end
++
++  def should_not_scale_workers
++    Delayed::Workless::Scaler::HerokuCedar.client.should_not_receive(:post_ps_scale)
++  end
++end
+-- 
+1.8.1
+

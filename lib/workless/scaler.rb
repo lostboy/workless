@@ -11,7 +11,7 @@ module Delayed
         base.send :extend, ClassMethods
         base.class_eval do
           after_commit "self.class.scaler.down", :on => :destroy
-          after_commit "self.class.scaler.up", :on => :create
+          after_commit "self.class.scaler.up", :on => :create, :unless => Proc.new {|r| r.run_at.future? }
           after_commit "self.class.scaler.down", :on => :update, :unless => Proc.new {|r| r.failed_at.nil? }
         end
 

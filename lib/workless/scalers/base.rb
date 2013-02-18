@@ -6,7 +6,7 @@ module Delayed
   
       class Base
         def self.jobs
-          Delayed::Job.all(:conditions => { :failed_at => nil })
+          Delayed::Job.where(failed_at: nil).where("run_at < ?", Time.now)
         end
       end
 
