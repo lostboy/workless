@@ -9,10 +9,8 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 ]
 SimpleCov.start
 
-Bundler.require(:default)
 
-require 'coveralls'
-Coveralls.wear!
+Bundler.require(:default)
 
 require 'workless'
 
