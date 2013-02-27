@@ -132,56 +132,169 @@ describe Delayed::Workless::Scaler::HerokuCedar do
 
   describe 'down' do
     before(:each) do
-      Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).and_return(1)
       ENV['WORKLESS_MAX_WORKERS']   = '10'
       ENV['WORKLESS_WORKERS_RATIO'] = '5'
     end
 
-    context 'with 0 min workers' do
+    context "with 1 worker" do
       before(:each) do
-        ENV['WORKLESS_MIN_WORKERS'] = '0'
+        Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).and_return(1)
       end
 
-      it 'should not scale down if there is a pending job' do
-        if_there_are_jobs 1
-        should_not_scale_workers
+      context 'with 0 min workers' do
+        before(:each) do
+          ENV['WORKLESS_MIN_WORKERS'] = '0'
+        end
 
-        Delayed::Workless::Scaler::HerokuCedar.down
+        it 'should not scale down if there is a pending job' do
+          if_there_are_jobs 1
+          should_not_scale_workers
+
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
+
+        it 'should scale to 0 if there are no pending jobs' do
+          if_there_are_jobs       0
+          should_scale_workers_to 0
+
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
+
       end
 
-      it 'should scale to 0 if there are no pending jobs' do
-        if_there_are_jobs       0
-        should_scale_workers_to 0
+      context 'with 1 min workers' do
+        before(:each) do
+          ENV['WORKLESS_MIN_WORKERS'] = '1'
+        end
 
-        Delayed::Workless::Scaler::HerokuCedar.down
+        it 'should not scale down if there is a pending job' do
+          if_there_are_jobs 1
+          should_not_scale_workers
+
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
+
+        it 'should not scale down even if there are no pending jobs' do
+          if_there_are_jobs 0
+          should_not_scale_workers
+
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
       end
     end
 
-    context 'with 1 min workers' do
+    context 'with 5 workers' do
       before(:each) do
-        ENV['WORKLESS_MIN_WORKERS'] = '1'
+        Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).and_return(5)
+      end
+      context 'with 0 min workers' do
+        before(:each) do
+          ENV['WORKLESS_MIN_WORKERS'] = '0'
+        end
+        it 'should scale to 0 if there are no pending jobs' do
+          if_there_are_jobs       0
+          should_scale_workers_to 0
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
+
+        it 'should scale to 1 if there are 2 pending jobs' do
+          if_there_are_jobs       2
+          should_scale_workers_to 1
+
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
       end
 
-      it 'should not scale down if there is a pending job' do
-        if_there_are_jobs 1
-        should_not_scale_workers
+      context 'with 1 min workers' do
+        before(:each) do
+          ENV['WORKLESS_MIN_WORKERS'] = '1'
+        end
+        it 'should scale to 1 if there are no pending jobs' do
+          if_there_are_jobs       0
+          should_scale_workers_to 1
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
 
-        Delayed::Workless::Scaler::HerokuCedar.down
-      end
+        it 'should scale to 1 if there are 2 pending jobs' do
+          if_there_are_jobs       2
+          should_scale_workers_to 1
 
-      it 'should not scale down even if there are no pending jobs' do
-        if_there_are_jobs 0
-        should_not_scale_workers
-
-        Delayed::Workless::Scaler::HerokuCedar.down
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
       end
     end
+
+    context 'with 500 workers' do
+      before(:each) do
+        ENV['WORKLESS_WORKERS_RATIO'] = '25'
+        Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).and_return(500)
+      end
+      context 'with 0 min workers' do
+        before(:each) do
+          ENV['WORKLESS_MIN_WORKERS'] = '0'
+        end
+        it 'should scale to 0 if there are no pending jobs' do
+          if_there_are_jobs       0
+          should_scale_workers_to 0
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
+        it 'should scale to 4 if there are 100 (ratio 25) pending jobs' do
+          if_there_are_jobs       100
+          should_scale_workers_to 4
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
+
+        it 'should scale to 5 if there are 101 (ratio 25) pending jobs' do
+          if_there_are_jobs       101
+          should_scale_workers_to 5
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
+
+        it 'should scale to 1 if there are 2 pending jobs' do
+          if_there_are_jobs       2
+          should_scale_workers_to 1
+
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
+      end
+
+      context 'with 1 min workers' do
+        before(:each) do
+          ENV['WORKLESS_MIN_WORKERS'] = '1'
+        end
+        it 'should scale to 1 if there are no pending jobs' do
+          if_there_are_jobs       0
+          should_scale_workers_to 1
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
+
+        it 'should scale to 4 if there are 100 (ratio 25) pending jobs' do
+          if_there_are_jobs       100
+          should_scale_workers_to 4
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
+
+        it 'should scale to 1 if there are 2 pending jobs' do
+          if_there_are_jobs       2
+          should_scale_workers_to 1
+
+          Delayed::Workless::Scaler::HerokuCedar.down
+        end
+      end
+    end
+
+
   end
 
   private
 
   def if_there_are_jobs(num)
     Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).any_number_of_times.and_return(NumWorkers.new(num))
+  end
+
+  def if_there_are_workers(num)
+    Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(num)
+    puts "Delayed::Workless::Scaler::HerokuCedar.workers: #{Delayed::Workless::Scaler::HerokuCedar.workers}"
   end
 
   def should_scale_workers_to(num)
