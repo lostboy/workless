@@ -11,6 +11,9 @@ SimpleCov.start
 
 Bundler.require(:default)
 
+require 'coveralls'
+Coveralls.wear!
+
 require 'workless'
 
 module Delayed
