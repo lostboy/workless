@@ -6,9 +6,41 @@ Bundler.require(:default)
 require 'workless'
 
 module Delayed
-  module Job
-    class Delayed::Job::Mock
-      def self.after_commit(method, *args, &block)
+  module ActiveRecord
+    module Job
+      class Delayed::ActiveRecord::Job::Mock
+        def self.after_commit(method, *args, &block)
+        end
+      end
+    end
+  end
+end
+
+module Delayed
+  module Mongoid
+    module Job
+      class Delayed::Mongoid::Job::Mock
+        def self.after_destroy(method, *args)
+        end
+        def self.after_create(method, *args)
+        end
+        def self.after_update(method, *args)
+        end
+      end
+    end
+  end
+end
+
+module Delayed
+  module MongoMapper
+    module Job
+      class Delayed::MongoMapper::Job::Mock
+        def self.after_destroy(method, *args)
+        end
+        def self.after_create(method, *args)
+        end
+        def self.after_update(method, *args)
+        end
       end
     end
   end
@@ -24,6 +56,8 @@ class NumWorkers
   end
 end
 
-Delayed::Job::Mock.send(:include, Delayed::Workless::Scaler)
+Delayed::ActiveRecord::Job::Mock.send(:include, Delayed::Workless::Scaler)
+Delayed::Mongoid::Job::Mock.send(:include, Delayed::Workless::Scaler)
+Delayed::MongoMapper::Job::Mock.send(:include, Delayed::Workless::Scaler)
 
 ENV['APP_NAME'] = 'TestHerokuApp'
