@@ -3,10 +3,10 @@ require 'delayed_job'
 module Delayed
   module Workless
     module Scaler
-  
+
       class Base
         def self.jobs
-          Delayed::Job.where(failed_at: nil).where("run_at < ?", Time.now)
+          Delayed::Job.where(:failed_at => nil).where("run_at < ?", Time.now)
         end
       end
 
