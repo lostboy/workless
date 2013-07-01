@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Delayed::Workless::Scaler::HerokuCedar do
   context 'with no workers' do
     before(:each) do
-      Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).and_return(0)
+      Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(0)
     end
     context "with jobs" do
       context "run_at in the past" do
