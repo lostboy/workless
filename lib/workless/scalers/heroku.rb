@@ -13,7 +13,7 @@ module Delayed
         end
 
         def self.down
-          client.put_workers(ENV['APP_NAME'], 0) unless self.workers == 0 or self.jobs.count > 0
+          client.put_workers(ENV['APP_NAME'], 0) unless self.jobs.count > 0 or self.workers == 0
         end
 
         def self.workers

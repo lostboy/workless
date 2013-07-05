@@ -30,7 +30,7 @@ describe Delayed::Mongoid::Job do
     end
     context 'with 1 worker' do
       before(:each) do
-        Delayed::Mongoid::Job::Mock.scaler.should_receive(:workers).and_return(1)
+        Delayed::Mongoid::Job::Mock.scaler.stub(:workers).and_return(1)
       end
       it "should scale down to none" do
         if_there_are_jobs 1
@@ -48,7 +48,7 @@ describe Delayed::Mongoid::Job do
 
     context 'with 5 workers' do
       before(:each) do
-        Delayed::Mongoid::Job::Mock.scaler.should_receive(:workers).and_return(5)
+        Delayed::Mongoid::Job::Mock.scaler.stub(:workers).and_return(5)
       end
       it "should scale down to none" do
         if_there_are_jobs 0
