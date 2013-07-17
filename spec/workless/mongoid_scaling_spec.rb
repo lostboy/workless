@@ -70,7 +70,7 @@ describe Delayed::Mongoid::Job do
   private
 
     def if_there_are_jobs(num)
-      Delayed::Mongoid::Job::Mock.scaler.should_receive(:jobs).any_number_of_times.and_return(NumWorkers.new(num))
+      Delayed::Mongoid::Job::Mock.scaler.stub(:jobs).and_return(NumWorkers.new(num))
     end
 
     def should_scale_workers_to(num)
