@@ -25,5 +25,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<delayed_job>, [">= 2.0.7"])
 
   s.add_development_dependency(%q<rspec>)
+  s.add_development_dependency(%q<appraisal>)
 end
 
