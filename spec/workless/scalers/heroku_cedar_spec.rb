@@ -8,13 +8,13 @@ describe Delayed::Workless::Scaler::HerokuCedar do
   context 'with jobs' do
 
     before do
-      Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).any_number_of_times.and_return(NumWorkers.new(10))
+      Delayed::Workless::Scaler::HerokuCedar.stub(:jobs).and_return(NumWorkers.new(10))
     end
 
     context 'without workers' do
 
       before do
-        Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).and_return(0)
+        Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(0)
       end
 
       it 'should set the workers to 1' do
@@ -27,7 +27,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
     context 'with workers' do
 
       before do
-        Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).and_return(10)
+        Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(10)
       end
 
       it 'should not set anything' do
@@ -42,7 +42,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
   context 'with no jobs' do
 
     before do
-      Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).any_number_of_times.and_return(NumWorkers.new(0))
+      Delayed::Workless::Scaler::HerokuCedar.stub(:jobs).and_return(NumWorkers.new(0))
     end
 
     context 'without workers' do
@@ -61,7 +61,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
     context 'with workers' do
 
       before do
-        Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).and_return(NumWorkers.new(10))
+        Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(NumWorkers.new(10))
       end
 
       it 'should set the workers to 0' do
