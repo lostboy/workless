@@ -1,4 +1,5 @@
 [![Build Status](https://secure.travis-ci.org/lostboy/workless.png?branch=master)](http://travis-ci.org/lostboy/workless)
+[![Gem Version](https://badge.fury.io/rb/workless.png)](http://badge.fury.io/rb/workless)
 
 # Workless
 
