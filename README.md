@@ -9,6 +9,7 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Updates
 
+* Version 1.2.0 includes new support for Sequel by @davidakachaos
 * Version 1.1.3 includes changes by @radanskoric to reduce number of heroku api calls
 * Version 1.1.2 includes a change by @davidakachaos to scale workers using after_commit
 * Version 1.1.1 includes a fix from @filiptepper and @fixr to correctly scale workers
