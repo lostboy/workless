@@ -54,6 +54,16 @@ module Delayed
   end
 end
 
+module Delayed
+  module Sequel
+    module Job
+      class Delayed::Sequel::Job::Mock
+        
+      end
+    end
+  end
+end
+
 class NumWorkers
   def initialize(count)
     @count = count
@@ -78,5 +88,6 @@ end
 Delayed::ActiveRecord::Job::Mock.send(:include, Delayed::Workless::Scaler)
 Delayed::Mongoid::Job::Mock.send(:include, Delayed::Workless::Scaler)
 Delayed::MongoMapper::Job::Mock.send(:include, Delayed::Workless::Scaler)
+Delayed::Sequel::Job::Mock.send(:include, Delayed::Workless::Scaler)
 
 ENV['APP_NAME'] = 'TestHerokuApp'
