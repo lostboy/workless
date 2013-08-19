@@ -84,7 +84,7 @@ Delayed::Job.scaler = :heroku_cedar
 Delayed::Job.scaler = :local
 </pre>
 
-The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/rush to start and stop workers on a local machine
+The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/rush to start and stop workers on a local machine. The local scaler also relies on script/delayed_job (which in turn requires the daemon gem). If you have been using foreman to run your workers, go back and see the delayed_job [setup instructions](https://github.com/collectiveidea/delayed_job/blob/master/README.md). 
 
 The heroku scaler works on the Aspen and Bamboo stacks while the heroku_cedar scaler only works on the new Cedar stack.
 
