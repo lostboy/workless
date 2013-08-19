@@ -100,6 +100,13 @@ heroku config:add WORKLESS_WORKERS_RATIO=50
 
 In this example, it will scale up to a maximum of 10 workers, firing up 1 worker for every 50 jobs on the queue. The minimum will be 0 workers, but you could set it to a higher value if you want.
 
+## How does Workless work?
+
+- `Delayed::Workless::Scaler` is mixed into the `Delayed::Job` class, which adds a bunch of callbacks to it.
+- When a job is created on the database, a `create` callback starts a worker.
+- The worker runs the job, which removes it from the database.
+- A `destroy` callback stops the worker.
+
 ## Note on Patches/Pull Requests
  
 * Please fork the project.
