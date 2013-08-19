@@ -1,11 +1,11 @@
-require 'workless/scalers/heroku'
-require 'workless/scalers/heroku_cedar'
-require 'workless/scalers/local'
-require 'workless/scalers/null'
-
 module Delayed
   module Workless
     module Scaler
+
+      autoload :Heroku,      "workless/scalers/heroku"
+      autoload :HerokuCedar, "workless/scalers/heroku_cedar"
+      autoload :Local,       "workless/scalers/local"
+      autoload :Null,        "workless/scalers/null"
 
       def self.included(base)
         base.send :extend, ClassMethods
