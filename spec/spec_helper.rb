@@ -9,7 +9,6 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 ]
 SimpleCov.start
 
-
 Bundler.require(:default)
 
 require 'workless'
