@@ -3,14 +3,13 @@ require 'rush'
 module Delayed
   module Workless
     module Scaler
-
       class Local < Base
-        
-        def executable_prefix
+
+        def self.executable_prefix
           if defined? Delayed::Compatibility.executable_prefix
             Delayed::Compatibility.executable_prefix
           else
-            "script"
+            'script'
           end
         end
 
@@ -32,9 +31,7 @@ module Delayed
         def self.workers
           Rush::Box.new.processes.filter(:cmdline => /delayed_job start -i workless|delayed_job.workless/).size
         end
-
       end
-  
     end
   end
 end
