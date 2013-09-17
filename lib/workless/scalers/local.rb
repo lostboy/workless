@@ -22,7 +22,7 @@ module Delayed
         end
 
         def self.down
-          unless jobs.count > 0 and workers > 0
+          if self.workers > 0 and jobs.count == 0
             Rush::Box.new[Rails.root].bash("#{executable_prefix}/delayed_job stop -i workless", :background => true)
           end
           true
