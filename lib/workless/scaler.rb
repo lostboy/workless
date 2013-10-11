@@ -13,7 +13,7 @@ module Delayed
           base.class_eval do
             after_commit "self.class.scaler.down", :on => :update, :if => Proc.new {|r| !r.failed_at.nil? }
             after_commit "self.class.scaler.down", :on => :destroy, :if => Proc.new {|r| r.destroyed? or !r.failed_at.nil? }
-            after_commit "self.class.scaler.up", :on => :create
+            after_commit "self.class.scaler.up", :on => :create, :unless => Proc.new {|r| r.run_at && r.run_at.future? }
           end          
         elsif base.to_s =~ /Sequel/
           base.send(:define_method, 'after_destroy') do
@@ -31,7 +31,7 @@ module Delayed
         else
           base.class_eval do
             after_destroy "self.class.scaler.down"
-            after_create "self.class.scaler.up"
+            after_create "self.class.scaler.up", :unless => Proc.new {|r| r.run_at && r.run_at.future? }
             after_update "self.class.scaler.down", :unless => Proc.new {|r| r.failed_at.nil? }
           end
         end
