@@ -101,6 +101,16 @@ heroku config:add WORKLESS_WORKERS_RATIO=50
 
 In this example, it will scale up to a maximum of 10 workers, firing up 1 worker for every 50 jobs on the queue. The minimum will be 0 workers, but you could set it to a higher value if you want.
 
+## run_at support
+
+Workless will ignore jobs with a run_at time which is in the future. To enable scaling up these jobs, simply add the free Heroku schedual add-on and let it run a rake task which will let workless try to scale up. For example as the command to run:
+
+<pre>
+rails r Delayed::Job.scaler.up
+</pre>
+
+Please note; when a task is past due to run and another job is queued, the pending job will be run.
+
 ## How does Workless work?
 
 - `Delayed::Workless::Scaler` is mixed into the `Delayed::Job` class, which adds a bunch of callbacks to it.
