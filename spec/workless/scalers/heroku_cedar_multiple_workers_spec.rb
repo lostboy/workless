@@ -27,6 +27,16 @@ describe Delayed::Workless::Scaler::HerokuCedar do
             should_scale_workers_to 1
           end
 
+          it 'should not scale workers for 24 future jobs' do
+            if_there_are_future_jobs       24
+            should_not_scale_workers
+          end
+
+          it 'should not scale workers for 2400 future jobs' do
+            if_there_are_future_jobs       2400
+            should_not_scale_workers
+          end
+
           it 'should set workers to 1 for 25 jobs' do
             if_there_are_jobs       25
             should_scale_workers_to 1
@@ -153,6 +163,12 @@ describe Delayed::Workless::Scaler::HerokuCedar do
         should_not_scale_workers
       end
 
+      it 'should scale down if there is a pending future job' do
+        if_there_are_future_jobs  1
+        if_there_are_jobs         0
+        should_scale_workers_to   0
+      end
+
       it "should not fetch the number of workers if there is a pending job" do
         if_there_are_jobs 1
         Delayed::Workless::Scaler::HerokuCedar.should_not_receive(:workers)
@@ -201,6 +217,10 @@ describe Delayed::Workless::Scaler::HerokuCedar do
 
   def if_there_are_jobs(num)
     Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).any_number_of_times.and_return(NumWorkers.new(num))
+  end
+
+  def if_there_are_future_jobs(num)
+    Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).any_number_of_times.and_return(FutureJobs.new(num))
   end
 
   def should_scale_workers_to(num)

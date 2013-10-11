@@ -74,6 +74,20 @@ class NumWorkers
   end
 end
 
+class FutureJobs
+  def run_at
+    Time.zone.now + 1000 * 60 * 60
+  end
+
+  def initialize(count)
+    @count = count
+  end
+
+  def count
+    0
+  end
+end
+
 Delayed::ActiveRecord::Job::Mock.send(:include, Delayed::Workless::Scaler)
 Delayed::Mongoid::Job::Mock.send(:include, Delayed::Workless::Scaler)
 Delayed::MongoMapper::Job::Mock.send(:include, Delayed::Workless::Scaler)
