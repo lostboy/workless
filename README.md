@@ -11,6 +11,7 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Updates
 
+* Version 1.2.3 includes a after_commit fix for compatibility by @lostboy
 * Version 1.2.2 includes after_commit fix by @collectiveip
 * Version 1.2.1 includes support for Rails 4 & DJ 4 by @florentmorin
 * Version 1.2.0 includes new support for Sequel by @davidakachaos
