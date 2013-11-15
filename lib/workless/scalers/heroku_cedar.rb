@@ -4,6 +4,8 @@ module Delayed
   module Workless
     module Scaler
       class HerokuCedar < Base
+        cattr_accessor :cur_workers
+        cattr_accessor :known
         extend Delayed::Workless::Scaler::HerokuClient
 
         def self.up
@@ -19,12 +21,11 @@ module Delayed
         end
 
         def self.workers
-          if Time.now > @@known
-            @@known = Time.now + 5
-            @@workers = client.get_ps(ENV['APP_NAME']).body.count { |p| p["process"] =~ /worker\.\d?/ }
+          unless known?
+            know client.get_ps(ENV['APP_NAME']).body.count { |p| p['process'] =~ /worker\.\d?/ }
           end
 
-          @@workers
+          self.cur_workers
         end
 
         # Returns the number of workers needed based on the current number of pending jobs and the settings defined by:
@@ -51,6 +52,15 @@ module Delayed
 
         def self.min_workers
           ENV['WORKLESS_MIN_WORKERS'].present? ? ENV['WORKLESS_MIN_WORKERS'].to_i : 0
+        end
+
+        def self.known?
+          Time.now < self.known
+        end
+
+        def self.know(n)
+          self.known = Time.now + 5
+          self.cur_workers = n
         end
 
       end
