@@ -23,4 +23,5 @@ pkg
 .rvmrc
 
 ## PROJECT::SPECIFIC
-Gemfile.lock
+Gemfile.lock.idea
+.idea

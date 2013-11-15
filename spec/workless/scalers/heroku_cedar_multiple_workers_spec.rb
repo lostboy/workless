@@ -93,7 +93,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
 
         context 'with 1 min workers' do
           before(:each) do
-            ENV['WORKLESS_MIN_WORKERS'] = '2'
+            ENV['WORKLESS_MIN_WORKERS'] = '1'
           end
 
           after(:all) do
@@ -101,15 +101,12 @@ describe Delayed::Workless::Scaler::HerokuCedar do
             ENV.delete('WORKLESS_MIN_WORKERS')
           end
 
-          it "should not fetch the number of workers for 1 jobs" do
-            if_there_are_jobs 1
-            Delayed::Workless::Scaler::HerokuCedar.should_not_receive(:workers)
-          end
-
-          it "should fetch the number of wokers exactly once for 1000 jobs" do
+          it 'should fetch the number of workers exactly once for 1000 jobs' do
             if_there_are_jobs 1000
-            Delayed::Workless::Scaler::HerokuCedar.client.stub(:post_ps_scale).and_return(true)
-            Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).exactly(:once)
+            Delayed::Workless::Scaler::HerokuCedar.stub(:known).and_return(Time.now + 5)
+            Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(1)
+            Delayed::Workless::Scaler::HerokuCedar.client.should_not_receive(:get_ps)
+            should_scale_workers_to(10)
           end
         end
 
@@ -153,9 +150,9 @@ describe Delayed::Workless::Scaler::HerokuCedar do
         should_not_scale_workers
       end
 
-      it "should not fetch the number of workers if there is a pending job" do
+      it 'should not fetch the number of workers if there is a pending job' do
         if_there_are_jobs 1
-        Delayed::Workless::Scaler::HerokuCedar.should_not_receive(:workers)
+        Delayed::Workless::Scaler::HerokuCedar.client.should_not_receive(:get_ps)
       end
 
       it 'should scale to 0 if there are no pending jobs' do
@@ -163,10 +160,10 @@ describe Delayed::Workless::Scaler::HerokuCedar do
         should_scale_workers_to 0
       end
 
-      it "should fetch the number of workers if there are no pending jobs" do
+      it 'should fetch the number of workers if there are no pending jobs' do
         if_there_are_jobs 0
         should_scale_workers_to 0
-        Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).exactly(:once)
+        Delayed::Workless::Scaler::HerokuCedar.client.should_not_receive(:get_ps)
       end
     end
 
@@ -180,9 +177,9 @@ describe Delayed::Workless::Scaler::HerokuCedar do
         should_not_scale_workers
       end
 
-      it "should not fetch the number of workers if there is a pending job" do
+      it 'should not fetch the number of workers if there is a pending job' do
         if_there_are_jobs 1
-        Delayed::Workless::Scaler::HerokuCedar.should_not_receive(:workers)
+        Delayed::Workless::Scaler::HerokuCedar.client.should_not_receive(:get_ps)
       end
 
       it 'should not scale down even if there are no pending jobs' do
@@ -190,7 +187,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
         should_not_scale_workers
       end
 
-      it "should fetch the number of workers if there are no pending jobs" do
+      it 'should fetch the number of workers if there are no pending jobs' do
         if_there_are_jobs 0
         Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).exactly(:once)
       end
@@ -200,7 +197,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
   private
 
   def if_there_are_jobs(num)
-    Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).any_number_of_times.and_return(NumWorkers.new(num))
+    Delayed::Workless::Scaler::HerokuCedar.stub(:jobs).and_return(NumWorkers.new(num))
   end
 
   def should_scale_workers_to(num)
