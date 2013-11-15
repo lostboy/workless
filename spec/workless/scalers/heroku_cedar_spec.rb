@@ -61,7 +61,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
     context 'with workers' do
 
       before do
-        Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(NumWorkers.new(10))
+        Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(10)
       end
 
       it 'should set the workers to 0' do
