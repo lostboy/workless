@@ -9,7 +9,11 @@ module Delayed
           if Rails.version >= "3.0.0"
             Delayed::Job.where(:failed_at => nil)
           else
-            Delayed::Job.all(:conditions => { :failed_at => nil })
+            if ENV['MONGOHQ_URL'].present?
+              Delayed::Job.all
+            else
+              Delayed::Job.all(:conditions => { :failed_at => nil })
+            end
           end
         end
       end
