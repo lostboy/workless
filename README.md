@@ -57,7 +57,11 @@ gem "workless", "~> 1.1.3"
 
 If you don't specify delayed_job in your Gemfile workless will bring it in, most likely the latest version (3.0.1)
 
+### IMPORTANT!
+
 Add your Heroku app name / [API key](https://devcenter.heroku.com/articles/authentication) as config vars to your Heroku instance.
+
+If you should change your Heroku password for the account on wich this API key is, IT WILL CHANGE! So if you change the password, please update the API key in the workless config to match!
 
 <pre>
 heroku config:add HEROKU_API_KEY=yourapikey APP_NAME=yourherokuappname
@@ -72,7 +76,7 @@ In the case of failed jobs Workless will only shut down the dj worker if all att
 Workless can be disabled by using the null scaler that will ignore the workers requests to scale up and down. In an environment file add this in the config block:
 
 <pre>
-config.after_initialize do 
+config.after_initialize do
   Delayed::Job.scaler = :null
 end
 </pre>
@@ -85,7 +89,7 @@ Delayed::Job.scaler = :heroku_cedar
 Delayed::Job.scaler = :local
 </pre>
 
-The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/rush to start and stop workers on a local machine. The local scaler also relies on script/delayed_job (which in turn requires the daemon gem). If you have been using foreman to run your workers, go back and see the delayed_job [setup instructions](https://github.com/collectiveidea/delayed_job/blob/master/README.md). 
+The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/rush to start and stop workers on a local machine. The local scaler also relies on script/delayed_job (which in turn requires the daemon gem). If you have been using foreman to run your workers, go back and see the delayed_job [setup instructions](https://github.com/collectiveidea/delayed_job/blob/master/README.md).
 
 The heroku scaler works on the Aspen and Bamboo stacks while the heroku_cedar scaler only works on the new Cedar stack.
 
@@ -109,7 +113,7 @@ In this example, it will scale up to a maximum of 10 workers, firing up 1 worker
 - A `destroy` callback stops the worker.
 
 ## Note on Patches/Pull Requests
- 
+
 * Please fork the project.
 * Make your feature addition or bug fix.
 * Commit, do not mess with rakefile, version, or history.
