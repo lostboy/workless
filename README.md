@@ -55,6 +55,14 @@ gem "delayed_job_active_record"
 gem "workless", "~> 1.1.3"
 </pre>
 
+### For rails 4.x with latest delayed_job 3.x using active record
+
+<pre>
+gem "delayed_job_active_record"
+gem "workless", "~> 1.2.3"
+</pre>
+
+
 If you don't specify delayed_job in your Gemfile workless will bring it in, most likely the latest version (3.0.1)
 
 Add your Heroku app name / [API key](https://devcenter.heroku.com/articles/authentication) as config vars to your Heroku instance.
