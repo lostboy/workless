@@ -1,4 +1,6 @@
 [![Build Status](https://secure.travis-ci.org/lostboy/workless.png?branch=master)](http://travis-ci.org/lostboy/workless)
+[![Gem Version](https://badge.fury.io/rb/workless.png)](http://badge.fury.io/rb/workless)
+[![Test Coverage](https://coveralls.io/repos/lostboy/workless/badge.png?branch=master)](https://coveralls.io/r/lostboy/workless)
 
 # Workless
 
@@ -9,6 +11,9 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Updates
 
+* Version 1.2.2 includes after_commit fix by @collectiveip
+* Version 1.2.1 includes support for Rails 4 & DJ 4 by @florentmorin
+* Version 1.2.0 includes new support for Sequel by @davidakachaos
 * Version 1.1.3 includes changes by @radanskoric to reduce number of heroku api calls
 * Version 1.1.2 includes a change by @davidakachaos to scale workers using after_commit
 * Version 1.1.1 includes a fix from @filiptepper and @fixr to correctly scale workers
@@ -80,7 +85,7 @@ Delayed::Job.scaler = :heroku_cedar
 Delayed::Job.scaler = :local
 </pre>
 
-The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/rush to start and stop workers on a local machine
+The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/rush to start and stop workers on a local machine. The local scaler also relies on script/delayed_job (which in turn requires the daemon gem). If you have been using foreman to run your workers, go back and see the delayed_job [setup instructions](https://github.com/collectiveidea/delayed_job/blob/master/README.md). 
 
 The heroku scaler works on the Aspen and Bamboo stacks while the heroku_cedar scaler only works on the new Cedar stack.
 
@@ -95,6 +100,13 @@ heroku config:add WORKLESS_WORKERS_RATIO=50
 </pre>
 
 In this example, it will scale up to a maximum of 10 workers, firing up 1 worker for every 50 jobs on the queue. The minimum will be 0 workers, but you could set it to a higher value if you want.
+
+## How does Workless work?
+
+- `Delayed::Workless::Scaler` is mixed into the `Delayed::Job` class, which adds a bunch of callbacks to it.
+- When a job is created on the database, a `create` callback starts a worker.
+- The worker runs the job, which removes it from the database.
+- A `destroy` callback stops the worker.
 
 ## Note on Patches/Pull Requests
  
