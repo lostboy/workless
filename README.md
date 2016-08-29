@@ -1,8 +1,10 @@
-[![Build Status](https://secure.travis-ci.org/lostboy/workless.png?branch=master)](http://travis-ci.org/lostboy/workless)
+[![Build Status](https://secure.travis-ci.org/davidakachaos/workless.png?branch=master)](http://travis-ci.org/davidakachaos/workless)
 [![Gem Version](https://badge.fury.io/rb/workless.png)](http://badge.fury.io/rb/workless)
-[![Test Coverage](https://coveralls.io/repos/lostboy/workless/badge.png?branch=master)](https://coveralls.io/r/lostboy/workless)
+[![Test Coverage](https://coveralls.io/repos/davidakachaos/workless/badge.png?branch=master)](https://coveralls.io/r/davidakachaos/workless)
 
-# Workless
+# Workless Revived
+
+This gem was originally created by [lostboy](https://github.com/lostboy). Since he became inactive, I've decided to revive this project under a new(ish) name.
 
 This is an addon for delayed_job (> 2.0.0) http://github.com/collectiveidea/delayed_job
 It is designed to be used when you're using Heroku as a host and have the need to do background work with delayed job but you don't want to leave the workers running all the time as it costs money.
@@ -11,6 +13,7 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Updates
 
+* Version 1.2.3 replaces multiple commit callback with two callbacks for compatibility by @lostboy
 * Version 1.2.2 includes after_commit fix by @collectiveip
 * Version 1.2.1 includes support for Rails 4 & DJ 4 by @florentmorin
 * Version 1.2.0 includes new support for Sequel by @davidakachaos
@@ -80,7 +83,7 @@ In the case of failed jobs Workless will only shut down the dj worker if all att
 Workless can be disabled by using the null scaler that will ignore the workers requests to scale up and down. In an environment file add this in the config block:
 
 <pre>
-config.after_initialize do 
+config.after_initialize do
   Delayed::Job.scaler = :null
 end
 </pre>
@@ -93,7 +96,7 @@ Delayed::Job.scaler = :heroku_cedar
 Delayed::Job.scaler = :local
 </pre>
 
-The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/rush to start and stop workers on a local machine. The local scaler also relies on script/delayed_job (which in turn requires the daemon gem). If you have been using foreman to run your workers, go back and see the delayed_job [setup instructions](https://github.com/collectiveidea/delayed_job/blob/master/README.md). 
+The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/rush to start and stop workers on a local machine. The local scaler also relies on script/delayed_job (which in turn requires the daemon gem). If you have been using foreman to run your workers, go back and see the delayed_job [setup instructions](https://github.com/collectiveidea/delayed_job/blob/master/README.md).
 
 The heroku scaler works on the Aspen and Bamboo stacks while the heroku_cedar scaler only works on the new Cedar stack.
 
@@ -117,7 +120,7 @@ In this example, it will scale up to a maximum of 10 workers, firing up 1 worker
 - A `destroy` callback stops the worker.
 
 ## Note on Patches/Pull Requests
- 
+
 * Please fork the project.
 * Make your feature addition or bug fix.
 * Commit, do not mess with rakefile, version, or history.
