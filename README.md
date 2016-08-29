@@ -1,6 +1,6 @@
-[![Build Status](https://secure.travis-ci.org/davidakachaos/workless.png?branch=master)](http://travis-ci.org/davidakachaos/workless)
-[![Gem Version](https://badge.fury.io/rb/workless.png)](http://badge.fury.io/rb/workless)
-[![Test Coverage](https://coveralls.io/repos/davidakachaos/workless/badge.png?branch=master)](https://coveralls.io/r/davidakachaos/workless)
+[![Build Status](https://secure.travis-ci.org/davidakachaos/workless_revived.png?branch=master)](http://travis-ci.org/davidakachaos/workless_revived)
+[![Gem Version](https://badge.fury.io/rb/workless_revived.png)](http://badge.fury.io/rb/workless_revived)
+[![Test Coverage](https://coveralls.io/repos/davidakachaos/workless_revived/badge.png?branch=master)](https://coveralls.io/r/davidakachaos/workless_revived)
 
 # Workless Revived
 
