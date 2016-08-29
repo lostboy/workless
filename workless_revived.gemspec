@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.summary = %q{Use delayed job workers only when theyre needed on Heroku}
 
-  s.add_runtime_dependency(%q<rails>, ["< 5"])
+  s.add_runtime_dependency(%q<rails>, ["< 5.0.0.1"])
   s.add_runtime_dependency(%q<heroku-api>)
   s.add_runtime_dependency(%q<rush>)
   s.add_runtime_dependency(%q<delayed_job>, [">= 2.0.7"])
