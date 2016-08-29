@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'rake'
-require 'bundler'
+require 'bundler/setup'
 
 require 'rspec/core/rake_task'
 desc "Run RSpec"
