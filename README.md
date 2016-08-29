@@ -13,6 +13,7 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Updates
 
+* Version 1.2.4 drops support for older versions!
 * Version 1.2.3 replaces multiple commit callback with two callbacks for compatibility by @lostboy
 * Version 1.2.2 includes after_commit fix by @collectiveip
 * Version 1.2.1 includes support for Rails 4 & DJ 4 by @florentmorin
@@ -25,31 +26,17 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Compatibility
 
-Workless should work correctly with Rubies 1.8.7, ree, 1.9.2 and 1.9.3. It is compatible with Delayed Job since version 2.0.7 up to the latest version 3.0.1, the table below shows tested compatibility with ruby, rails and delayed_job
+Workless should work correctly with Rubies 2.0.0 and up. It is compatible with Delayed Job since version 2.0.7 up to the latest version 4.1.2, the table below shows tested compatibility with ruby, rails and delayed_job
 
 Ruby | Rails  | Delayed Job
 ---------- | ------ | -----
-1.8.7-ree  | 2.1.14 | 2.0.7
-1.9.2      | 3.2    | 2.1.4
-1.9.3      | 3.2    | 3.0.1
+2.0.0  | 3.2.22 | 2.0.7
+2.2.4      | 4.2    | 2.1.4
+2.3.0      | 5.0    | 4.1.2
 
 ## Installation
 
-Add the workless gem and the delayed_job gem to your project Gemfile and update your bundle. Its is recommended to specify the gem version for delayed_job especially if you are using rails 2.3.x which doesn't work with the latest delayed_job
-
-### For rails 2.3.x the latest compatible delayed_job is 2.0.7
-
-<pre>
-gem "delayed_job", "2.0.7"
-gem "workless", "~> 1.1.3"
-</pre>
-
-### For rails 3.x with delayed_job 2.1.x
-
-<pre>
-gem "delayed_job", "~> 2.1.4"
-gem "workless", "~> 1.1.3"
-</pre>
+Add the workless gem and the delayed_job gem to your project Gemfile and update your bundle. Its is recommended to specify the gem version for delayed_job
 
 ### For rails 3.x with latest delayed_job 3.x using active record
 
@@ -62,11 +49,18 @@ gem "workless", "~> 1.1.3"
 
 <pre>
 gem "delayed_job_active_record"
-gem "workless", "~> 1.2.3"
+gem "workless_revived", "~> 1.2.4"
+</pre>
+
+### For rails 5.x with latest delayed_job 3.x using active record
+
+<pre>
+gem "delayed_job_active_record"
+gem "workless_revived", "~> 1.2.4"
 </pre>
 
 
-If you don't specify delayed_job in your Gemfile workless will bring it in, most likely the latest version (3.0.1)
+If you don't specify delayed_job in your Gemfile workless will bring it in, most likely the latest version (4.1.2)
 
 Add your Heroku app name / [API key](https://devcenter.heroku.com/articles/authentication) as config vars to your Heroku instance.
 
@@ -129,4 +123,7 @@ In this example, it will scale up to a maximum of 10 workers, firing up 1 worker
 
 ## Copyright
 
-Copyright (c) 2010 lostboy. See LICENSE for details.
+Copyright (c) 2010 lostboy.
+Copyright (c) 2016 davidakachaos.
+
+See LICENSE for details.
