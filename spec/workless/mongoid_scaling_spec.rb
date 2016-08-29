@@ -4,11 +4,13 @@ describe Delayed::Mongoid::Job do
   context 'with mongoid scaler' do
     before(:each) do
       ENV['WORKLESS_WORKERS_RATIO'] = '25'
+      ENV['WORKLESS_MAX_WORKERS'] = '10'
+      ENV['WORKLESS_MIN_WORKERS'] = '0'
       Delayed::Mongoid::Job::Mock.scaler = :heroku_cedar
     end
     context 'with no workers' do
       before(:each) do
-        Delayed::Mongoid::Job::Mock.scaler.should_receive(:workers).and_return(0)
+        Delayed::Mongoid::Job::Mock.scaler.stub(:workers).and_return(0)
       end
       it "should scale up" do
         if_there_are_jobs 1
@@ -56,13 +58,21 @@ describe Delayed::Mongoid::Job do
 
         Delayed::Mongoid::Job::Mock.scaler.down
       end
-      pending "This will be a new feature" do
-        it "should scale down to 1" do
-          if_there_are_jobs 1
-          should_scale_workers_to 1
+    end
+    context 'with 5 workers and min 1 worker' do
+      before(:each) do
+        ENV['WORKLESS_WORKERS_RATIO'] = '25'
+        ENV['WORKLESS_MAX_WORKERS'] = '10'
+        ENV['WORKLESS_MIN_WORKERS'] = '1'
+        Delayed::Mongoid::Job::Mock.scaler.stub(:workers).and_return(5)
+      end
+      it "should scale down to 1" do
+        pending "This will be a new feature"
+        
+        if_there_are_jobs 1
+        should_scale_workers_to 1
 
-          Delayed::Mongoid::Job::Mock.scaler.down
-        end
+        Delayed::Mongoid::Job::Mock.scaler.down
       end
     end
   end

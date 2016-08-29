@@ -56,13 +56,12 @@ describe Delayed::Sequel::Job do
 
         Delayed::Sequel::Job::Mock.scaler.down
       end
-      pending "This will be a new feature" do
-        it "should scale down to 1" do
-          if_there_are_jobs 1
-          should_scale_workers_to 1
+      it "should scale down to 1" do
+        pending "This will be a new feature"
+        if_there_are_jobs 1
+        should_scale_workers_to 1
 
-          Delayed::Sequel::Job::Mock.scaler.down
-        end
+        Delayed::Sequel::Job::Mock.scaler.down
       end
     end
   end
