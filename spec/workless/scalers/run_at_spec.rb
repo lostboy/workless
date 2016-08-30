@@ -8,8 +8,8 @@ describe Delayed::Workless::Scaler::HerokuCedar do
       ENV['WORKLESS_MIN_WORKERS'] = '0'
       Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(0)
     end
-    context "with jobs" do
-      context "run_at in the past" do
+    context 'with jobs' do
+      context 'run_at in the past' do
         it 'should set workers to 1 for 1 job' do
           if_there_are_jobs       1
           should_scale_workers_to 1
@@ -17,9 +17,9 @@ describe Delayed::Workless::Scaler::HerokuCedar do
           Delayed::Workless::Scaler::HerokuCedar.up
         end
       end
-      context "run_at in the future" do
+      context 'run_at in the future' do
         it 'should set workers to 0 for 1 job' do
-          if_there_are_future_jobs       1
+          if_there_are_future_jobs 1
           should_not_scale_workers
 
           Delayed::Workless::Scaler::HerokuCedar.up
@@ -34,7 +34,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
     Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).at_least(1).times.and_return(NumWorkers.new(num))
   end
 
-  def if_there_are_future_jobs(num)
+  def if_there_are_future_jobs(_num)
     Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).at_least(1).times.and_return(FutureJob.new)
   end
 

@@ -14,7 +14,7 @@ class WorklessChecker
       headers['Content-Length'] = response_body.bytesize.to_s
     end
 
-    return [status, headers, response_body ? [response_body] : response]
+    [status, headers, response_body ? [response_body] : response]
   end
 
   # fix issue if response's body is a Proc
@@ -28,10 +28,10 @@ class WorklessChecker
 
   # if send file?
   def file?(headers)
-    headers["Content-Transfer-Encoding"] == "binary"
+    headers['Content-Transfer-Encoding'] == 'binary'
   end
 
   def html_request?(headers, response)
-    headers['Content-Type'] && headers['Content-Type'].include?('text/html') && response.body.include?("<html")
+    headers['Content-Type'] && headers['Content-Type'].include?('text/html') && response.body.include?('<html')
   end
 end

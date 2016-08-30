@@ -7,15 +7,15 @@ module Delayed
         extend Delayed::Workless::Scaler::HerokuClient
 
         def self.up
-          client.post_ps_scale(ENV['APP_NAME'], 'worker', self.workers_needed) if self.workers_needed > self.min_workers and self.workers < self.workers_needed
+          client.post_ps_scale(ENV['APP_NAME'], 'worker', workers_needed) if workers_needed > min_workers && workers < workers_needed
         end
 
         def self.down
-          client.post_ps_scale(ENV['APP_NAME'], 'worker', self.workers_needed) unless self.workers == self.workers_needed
+          client.post_ps_scale(ENV['APP_NAME'], 'worker', workers_needed) unless workers == workers_needed
         end
 
         def self.workers
-          client.get_ps(ENV['APP_NAME']).body.count { |p| p["process"] =~ /worker\.\d?/ }
+          client.get_ps(ENV['APP_NAME']).body.count { |p| p['process'] =~ /worker\.\d?/ }
         end
 
         # Returns the number of workers needed based on the current number of pending jobs and the settings defined by:
@@ -25,7 +25,7 @@ module Delayed
         # ENV['WORKLESS_MIN_WORKERS']
         #
         def self.workers_needed
-          [[(self.jobs.count.to_f / self.workers_ratio).ceil, self.max_workers].min, self.min_workers].max
+          [[(jobs.count.to_f / workers_ratio).ceil, max_workers].min, min_workers].max
         end
 
         def self.workers_ratio

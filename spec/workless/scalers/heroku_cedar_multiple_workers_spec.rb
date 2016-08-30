@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Delayed::Workless::Scaler::HerokuCedar do
-
   describe 'up' do
     after(:each) do
       Delayed::Workless::Scaler::HerokuCedar.up
@@ -100,16 +99,16 @@ describe Delayed::Workless::Scaler::HerokuCedar do
           end
 
           after(:all) do
-            #Clear up for other specs
+            # Clear up for other specs
             ENV.delete('WORKLESS_MIN_WORKERS')
           end
 
-          it "should not fetch the number of workers for 1 jobs" do
+          it 'should not fetch the number of workers for 1 jobs' do
             if_there_are_jobs 1
             Delayed::Workless::Scaler::HerokuCedar.should_not_receive(:workers)
           end
 
-          it "should fetch the number of wokers exactly once for 1000 jobs" do
+          it 'should fetch the number of wokers exactly once for 1000 jobs' do
             if_there_are_jobs 1000
             Delayed::Workless::Scaler::HerokuCedar.client.stub(:post_ps_scale).and_return(true)
             Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).exactly(:once)
@@ -122,7 +121,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
           end
 
           it 'should not set more workers for 25 jobs' do
-            if_there_are_jobs       25
+            if_there_are_jobs 25
             should_not_scale_workers
           end
 
@@ -161,7 +160,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
         should_scale_workers_to 0
       end
 
-      it "should fetch the number of workers if there are no pending jobs" do
+      it 'should fetch the number of workers if there are no pending jobs' do
         if_there_are_jobs 0
         should_scale_workers_to 0
         Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).exactly(:once)
@@ -183,11 +182,11 @@ describe Delayed::Workless::Scaler::HerokuCedar do
         should_not_scale_workers
       end
 
-      it "should fetch the number of workers if there are no pending jobs" do
+      it 'should fetch the number of workers if there are no pending jobs' do
         if_there_are_jobs 0
         Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).exactly(:once)
       end
-      context "with 5 running workers" do
+      context 'with 5 running workers' do
         before(:each) do
           ENV['WORKLESS_WORKERS_RATIO'] = '25'
           ENV['WORKLESS_MAX_WORKERS'] = '10'

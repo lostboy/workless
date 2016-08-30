@@ -12,13 +12,13 @@ describe Delayed::Mongoid::Job do
       before(:each) do
         Delayed::Mongoid::Job::Mock.scaler.stub(:workers).and_return(0)
       end
-      it "should scale up" do
+      it 'should scale up' do
         if_there_are_jobs 1
         should_scale_workers_to 1
 
         Delayed::Mongoid::Job::Mock.scaler.up
       end
-      it "should scale up" do
+      it 'should scale up' do
         if_there_are_jobs 5
         should_scale_workers_to 1
 
@@ -34,13 +34,13 @@ describe Delayed::Mongoid::Job do
       before(:each) do
         Delayed::Mongoid::Job::Mock.scaler.stub(:workers).and_return(1)
       end
-      it "should scale down to none" do
+      it 'should scale down to none' do
         if_there_are_jobs 1
         should_not_scale_workers
 
         Delayed::Mongoid::Job::Mock.scaler.up
       end
-      it "should scale down to 1" do
+      it 'should scale down to 1' do
         if_there_are_jobs 1
         should_not_scale_workers
 
@@ -52,7 +52,7 @@ describe Delayed::Mongoid::Job do
       before(:each) do
         Delayed::Mongoid::Job::Mock.scaler.stub(:workers).and_return(5)
       end
-      it "should scale down to none" do
+      it 'should scale down to none' do
         if_there_are_jobs 0
         should_scale_workers_to 0
 
@@ -66,7 +66,7 @@ describe Delayed::Mongoid::Job do
         ENV['WORKLESS_MIN_WORKERS'] = '1'
         Delayed::Mongoid::Job::Mock.scaler.stub(:workers).and_return(5)
       end
-      it "should scale down to 1" do
+      it 'should scale down to 1' do
         if_there_are_jobs 1
         should_scale_workers_to 1
 
@@ -77,16 +77,15 @@ describe Delayed::Mongoid::Job do
 
   private
 
-    def if_there_are_jobs(num)
-      Delayed::Mongoid::Job::Mock.scaler.stub(:jobs).and_return(NumWorkers.new(num))
-    end
+  def if_there_are_jobs(num)
+    Delayed::Mongoid::Job::Mock.scaler.stub(:jobs).and_return(NumWorkers.new(num))
+  end
 
-    def should_scale_workers_to(num)
-      Delayed::Mongoid::Job::Mock.scaler.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], 'worker', num)
-    end
+  def should_scale_workers_to(num)
+    Delayed::Mongoid::Job::Mock.scaler.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], 'worker', num)
+  end
 
-    def should_not_scale_workers
-      Delayed::Mongoid::Job::Mock.scaler.client.should_not_receive(:post_ps_scale)
-    end
-
+  def should_not_scale_workers
+    Delayed::Mongoid::Job::Mock.scaler.client.should_not_receive(:post_ps_scale)
+  end
 end

@@ -4,31 +4,28 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{workless_revived}
-  s.version = "1.2.4.2"
+  s.name = 'workless_revived'
+  s.version = '1.2.4.2'
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 1.3.6") if s.respond_to? :required_rubygems_version=
-  s.authors = ["davidakachaos"]
-  s.date = %q{2016-08-29}
-  s.description = %q{Extension to Delayed Job to enable workers to scale up when needed}
-  s.email = %q{davidakachaos@gmail.com}
-  
-  s.files = Dir.glob("{rails,lib}/**/*") + %w(LICENSE README.md )
-  
-  s.homepage = %q{http://github.com/davidakachaos/workless_revived}
-  s.require_paths = ["lib"]
-  s.summary = %q{Use delayed job workers only when theyre needed on Heroku}
+  s.required_rubygems_version = Gem::Requirement.new('>= 1.3.6') if s.respond_to? :required_rubygems_version=
+  s.authors = ['davidakachaos']
+  s.date = '2016-08-29'
+  s.description = 'Extension to Delayed Job to enable workers to scale up when needed'
+  s.email = 'davidakachaos@gmail.com'
 
-  s.add_runtime_dependency(%q<rails>, ["< 5.0.0.1"])
-  s.add_runtime_dependency(%q<heroku-api>)
-  s.add_runtime_dependency(%q<rush>)
-  s.add_runtime_dependency(%q<delayed_job>, [">= 2.0.7"])
-  if RUBY_VERSION < "2.2.2"
-    s.add_runtime_dependency(%q<rack>, ['<= 1.6.0'])
-  end
+  s.files = Dir.glob('{rails,lib}/**/*') + %w(LICENSE README.md )
+
+  s.homepage = 'http://github.com/davidakachaos/workless_revived'
+  s.require_paths = ['lib']
+  s.summary = 'Use delayed job workers only when theyre needed on Heroku'
+
+  s.add_runtime_dependency('rails', ['< 5.0.0.1'])
+  s.add_runtime_dependency('heroku-api')
+  s.add_runtime_dependency('rush')
+  s.add_runtime_dependency('delayed_job', ['>= 2.0.7'])
+  s.add_runtime_dependency('rack', ['<= 1.6.0']) if RUBY_VERSION < '2.2.2'
 
   s.required_ruby_version = '>= 2.0.0'
 
-  s.add_development_dependency(%q<rspec>)
+  s.add_development_dependency('rspec')
 end
-
