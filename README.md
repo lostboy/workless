@@ -13,6 +13,7 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Updates
 
+* Version 1.2.5 Added middleware to check on delayed jobs, fixed Rails 5 support
 * Version 1.2.4 drops support for older versions!
 * Version 1.2.3 replaces multiple commit callback with two callbacks for compatibility by @lostboy
 * Version 1.2.2 includes after_commit fix by @collectiveip
