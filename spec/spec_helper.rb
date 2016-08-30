@@ -1,7 +1,9 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'coveralls'
-Coveralls.wear!('rails')
+Coveralls.wear!
+
+require 'active_support'
 
 Bundler.require(:default)
 
