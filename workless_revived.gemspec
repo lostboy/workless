@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<rush>)
   s.add_runtime_dependency(%q<delayed_job>, [">= 2.0.7"])
   if RUBY_VERSION < "2.2.2"
-    gs.add_runtime_dependency(%q<rack>, ['<= 1.6.0'])
+    s.add_runtime_dependency(%q<rack>, ['<= 1.6.0'])
   end
 
   s.required_ruby_version = '>= 2.0.0'
