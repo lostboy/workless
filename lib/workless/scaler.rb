@@ -10,9 +10,15 @@ module Delayed
         base.send :extend, ClassMethods
         if base.to_s =~ /ActiveRecord/
           base.class_eval do
-            after_commit :"self.class.scaler.down", on: :update, if: proc { |r| !r.failed_at.nil? }
-            after_commit :'self.class.scaler.down', on: :destroy, if: proc { |r| r.destroyed? || !r.failed_at.nil? }
-            after_commit :'self.class.scaler.up', on: :create
+            after_commit(on: :update, if: proc { |r| !r.failed_at.nil? }) do 
+              self.class.scaler.down
+            end
+            after_commit(on: :destroy, if: proc { |r| r.destroyed? || !r.failed_at.nil? }) do
+              self.class.scaler.down
+            end
+            after_commit(on: :create) do 
+              self.class.scaler.up
+            end
           end
         elsif base.to_s =~ /Sequel/
           base.send(:define_method, 'after_destroy') do
