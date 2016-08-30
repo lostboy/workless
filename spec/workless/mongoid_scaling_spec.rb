@@ -67,8 +67,6 @@ describe Delayed::Mongoid::Job do
         Delayed::Mongoid::Job::Mock.scaler.stub(:workers).and_return(5)
       end
       it "should scale down to 1" do
-        pending "This will be a new feature"
-        
         if_there_are_jobs 1
         should_scale_workers_to 1
 

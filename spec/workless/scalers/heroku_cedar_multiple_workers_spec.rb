@@ -9,6 +9,9 @@ describe Delayed::Workless::Scaler::HerokuCedar do
 
     context 'with no workers' do
       before(:each) do
+        ENV['WORKLESS_WORKERS_RATIO'] = '25'
+        ENV['WORKLESS_MAX_WORKERS'] = '10'
+        ENV['WORKLESS_MIN_WORKERS'] = '0'
         Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(0)
       end
 
@@ -153,11 +156,6 @@ describe Delayed::Workless::Scaler::HerokuCedar do
         should_not_scale_workers
       end
 
-      it "should not fetch the number of workers if there is a pending job" do
-        if_there_are_jobs 1
-        Delayed::Workless::Scaler::HerokuCedar.should_not_receive(:workers)
-      end
-
       it 'should scale to 0 if there are no pending jobs' do
         if_there_are_jobs       0
         should_scale_workers_to 0
@@ -180,11 +178,6 @@ describe Delayed::Workless::Scaler::HerokuCedar do
         should_not_scale_workers
       end
 
-      it "should not fetch the number of workers if there is a pending job" do
-        if_there_are_jobs 1
-        Delayed::Workless::Scaler::HerokuCedar.should_not_receive(:workers)
-      end
-
       it 'should not scale down even if there are no pending jobs' do
         if_there_are_jobs 0
         should_not_scale_workers
@@ -193,6 +186,27 @@ describe Delayed::Workless::Scaler::HerokuCedar do
       it "should fetch the number of workers if there are no pending jobs" do
         if_there_are_jobs 0
         Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).exactly(:once)
+      end
+      context "with 5 running workers" do
+        before(:each) do
+          ENV['WORKLESS_WORKERS_RATIO'] = '25'
+          ENV['WORKLESS_MAX_WORKERS'] = '10'
+          Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(10)
+        end
+        it 'should scale down to 1 worker when there are 2 jobs' do
+          if_there_are_jobs 2
+          should_scale_workers_to 1
+        end
+
+        it 'should scale down to 2 workers when there are 40 jobs' do
+          if_there_are_jobs 40
+          should_scale_workers_to 2
+        end
+
+        it 'should not scale workers when there are many jobs' do
+          if_there_are_jobs 10_000
+          should_not_scale_workers
+        end
       end
     end
   end

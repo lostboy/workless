@@ -4,6 +4,8 @@ describe Delayed::Sequel::Job do
   context 'with Sequel scaler' do
     before(:each) do
       ENV['WORKLESS_WORKERS_RATIO'] = '25'
+      ENV['WORKLESS_MAX_WORKERS'] = '10'
+      ENV['WORKLESS_MIN_WORKERS'] = '0'
       Delayed::Sequel::Job::Mock.scaler = :heroku_cedar
     end
     context 'with no workers' do
@@ -57,7 +59,6 @@ describe Delayed::Sequel::Job do
         Delayed::Sequel::Job::Mock.scaler.down
       end
       it "should scale down to 1" do
-        pending "This will be a new feature"
         if_there_are_jobs 1
         should_scale_workers_to 1
 

@@ -3,6 +3,9 @@ require 'spec_helper'
 describe Delayed::Workless::Scaler::HerokuCedar do
   context 'with no workers' do
     before(:each) do
+      ENV['WORKLESS_WORKERS_RATIO'] = '25'
+      ENV['WORKLESS_MAX_WORKERS'] = '10'
+      ENV['WORKLESS_MIN_WORKERS'] = '0'
       Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(0)
     end
     context "with jobs" do
