@@ -4,8 +4,9 @@ rvm:
   - 2.3.1
 gemfile:
   - Gemfile
-  - gemfiles/Gemfile.rails-4.1.x
-  - gemfiles/Gemfile.rails-4.0.x
   - gemfiles/Gemfile.rails-5.0.x
   - gemfiles/Gemfile.rails-4.2.x
-  - gemfiles/Gemfile.rails-3.2.x
+
+addons:
+  code_climate:
+    repo_token: 757524015c028211d9a393355f4ff90ee177992ccae34c3bac636979d10f6e5e

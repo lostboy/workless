@@ -13,6 +13,7 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Updates
 
+* Version 1.3.0 DROPS SUPPORT FOR OLDER RUBY AND RAILS VERSIONS!
 * Version 1.2.5 Added middleware to check on delayed jobs, fixed Rails 5 support
 * Version 1.2.4 drops support for older versions!
 * Version 1.2.3 replaces multiple commit callback with two callbacks for compatibility by @lostboy
@@ -31,20 +32,12 @@ Workless should work correctly with Rubies 2.0.0 and up. It is compatible with D
 
 Ruby | Rails  | Delayed Job
 ---------- | ------ | -----
-2.0.0  | 3.2.22 | 2.0.7
-2.2.4      | 4.2    | 2.1.4
-2.3.0      | 5.0    | 4.1.2
+2.2.5      | 4.2    | 2.1.4
+2.3.1      | 5.0    | 4.1.2
 
 ## Installation
 
 Add the workless gem and the delayed_job gem to your project Gemfile and update your bundle. Its is recommended to specify the gem version for delayed_job
-
-### For rails 3.x with latest delayed_job 3.x using active record
-
-<pre>
-gem "delayed_job_active_record"
-gem "workless", "~> 1.1.3"
-</pre>
 
 ### For rails 4.x with latest delayed_job 3.x using active record
 

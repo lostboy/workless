@@ -5,11 +5,7 @@ module Delayed
     module Scaler
       class Base
         def self.jobs
-          if Rails.version >= '3.0.0'
-            Delayed::Job.where(failed_at: nil)
-          else
-            Delayed::Job.all(conditions: { failed_at: nil })
-          end
+          Delayed::Job.where(failed_at: nil)
         end
       end
 
