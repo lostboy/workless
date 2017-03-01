@@ -11,6 +11,9 @@ It is designed to be used when you're using Heroku as a host and have the need t
 
 By adding the gem to your project and configuring our Heroku app with some config variables workless should do the rest.
 
+:warning: **[The Legacy API will be sunset on April 15th, 2017](https://devcenter.heroku.com/changelog-items/862)** :warning:
+Please upgrade to version 2.0.0 as soon as you can. Version 2.0.0 is released on March 1st, 2017.
+
 ## Updates
 
 * Version 2.0.0 Updated to use latest version of the Heroku API. Drops support for old style Heroku
