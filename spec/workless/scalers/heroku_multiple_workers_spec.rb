@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Delayed::Workless::Scaler::HerokuCedar do
+describe Delayed::Workless::Scaler::Heroku do
   describe 'up' do
     after(:each) do
-      Delayed::Workless::Scaler::HerokuCedar.up
+      Delayed::Workless::Scaler::Heroku.up
     end
 
     context 'with no workers' do
@@ -11,7 +11,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
         ENV['WORKLESS_WORKERS_RATIO'] = '25'
         ENV['WORKLESS_MAX_WORKERS'] = '10'
         ENV['WORKLESS_MIN_WORKERS'] = '0'
-        Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(0)
+        Delayed::Workless::Scaler::Heroku.stub(:workers).and_return(0)
       end
 
       context 'with 10 max workers' do
@@ -85,7 +85,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
 
     context 'with workers' do
       before(:each) do
-        Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(1)
+        Delayed::Workless::Scaler::Heroku.stub(:workers).and_return(1)
       end
 
       context 'with 10 max workers' do
@@ -105,13 +105,13 @@ describe Delayed::Workless::Scaler::HerokuCedar do
 
           it 'should not fetch the number of workers for 1 jobs' do
             if_there_are_jobs 1
-            Delayed::Workless::Scaler::HerokuCedar.should_not_receive(:workers)
+            Delayed::Workless::Scaler::Heroku.should_not_receive(:workers)
           end
 
           it 'should fetch the number of wokers exactly once for 1000 jobs' do
             if_there_are_jobs 1000
-            Delayed::Workless::Scaler::HerokuCedar.client.stub(:post_ps_scale).and_return(true)
-            Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).exactly(:once)
+            Delayed::Workless::Scaler::Heroku.client.formation.stub(:update).and_return(true)
+            Delayed::Workless::Scaler::Heroku.should_receive(:workers).exactly(:once)
           end
         end
 
@@ -136,11 +136,11 @@ describe Delayed::Workless::Scaler::HerokuCedar do
 
   describe 'down' do
     after(:each) do
-      Delayed::Workless::Scaler::HerokuCedar.down
+      Delayed::Workless::Scaler::Heroku.down
     end
 
     before(:each) do
-      Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(1)
+      Delayed::Workless::Scaler::Heroku.stub(:workers).and_return(1)
       ENV['WORKLESS_MAX_WORKERS']   = '10'
       ENV['WORKLESS_WORKERS_RATIO'] = '5'
     end
@@ -163,7 +163,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
       it 'should fetch the number of workers if there are no pending jobs' do
         if_there_are_jobs 0
         should_scale_workers_to 0
-        Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).exactly(:once)
+        Delayed::Workless::Scaler::Heroku.should_receive(:workers).exactly(:once)
       end
     end
 
@@ -184,13 +184,13 @@ describe Delayed::Workless::Scaler::HerokuCedar do
 
       it 'should fetch the number of workers if there are no pending jobs' do
         if_there_are_jobs 0
-        Delayed::Workless::Scaler::HerokuCedar.should_receive(:workers).exactly(:once)
+        Delayed::Workless::Scaler::Heroku.should_receive(:workers).exactly(:once)
       end
       context 'with 5 running workers' do
         before(:each) do
           ENV['WORKLESS_WORKERS_RATIO'] = '25'
           ENV['WORKLESS_MAX_WORKERS'] = '10'
-          Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(10)
+          Delayed::Workless::Scaler::Heroku.stub(:workers).and_return(10)
         end
         it 'should scale down to 1 worker when there are 2 jobs' do
           if_there_are_jobs 2
@@ -213,14 +213,15 @@ describe Delayed::Workless::Scaler::HerokuCedar do
   private
 
   def if_there_are_jobs(num)
-    Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).at_least(1).times.and_return(NumWorkers.new(num))
+    Delayed::Workless::Scaler::Heroku.should_receive(:jobs).at_least(1).times.and_return(NumWorkers.new(num))
   end
 
   def should_scale_workers_to(num)
-    Delayed::Workless::Scaler::HerokuCedar.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], 'worker', num)
+    updates = { "quantity": num }
+    Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['APP_NAME'], 'worker', updates)
   end
 
   def should_not_scale_workers
-    Delayed::Workless::Scaler::HerokuCedar.client.should_not_receive(:post_ps_scale)
+    Delayed::Workless::Scaler::Heroku.client.formation.should_not_receive(:update)
   end
 end

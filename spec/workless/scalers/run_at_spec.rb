@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe Delayed::Workless::Scaler::HerokuCedar do
+describe Delayed::Workless::Scaler::Heroku do
   context 'with no workers' do
     before(:each) do
       ENV['WORKLESS_WORKERS_RATIO'] = '25'
       ENV['WORKLESS_MAX_WORKERS'] = '10'
       ENV['WORKLESS_MIN_WORKERS'] = '0'
-      Delayed::Workless::Scaler::HerokuCedar.stub(:workers).and_return(0)
+      Delayed::Workless::Scaler::Heroku.stub(:workers).and_return(0)
     end
     context 'with jobs' do
       context 'run_at in the past' do
@@ -14,7 +14,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
           if_there_are_jobs       1
           should_scale_workers_to 1
 
-          Delayed::Workless::Scaler::HerokuCedar.up
+          Delayed::Workless::Scaler::Heroku.up
         end
       end
       context 'run_at in the future' do
@@ -22,7 +22,7 @@ describe Delayed::Workless::Scaler::HerokuCedar do
           if_there_are_future_jobs 1
           should_not_scale_workers
 
-          Delayed::Workless::Scaler::HerokuCedar.up
+          Delayed::Workless::Scaler::Heroku.up
         end
       end
     end
@@ -31,18 +31,19 @@ describe Delayed::Workless::Scaler::HerokuCedar do
   private
 
   def if_there_are_jobs(num)
-    Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).at_least(1).times.and_return(NumWorkers.new(num))
-  end
-
-  def if_there_are_future_jobs(_num)
-    Delayed::Workless::Scaler::HerokuCedar.should_receive(:jobs).at_least(1).times.and_return(FutureJob.new)
+    Delayed::Workless::Scaler::Heroku.should_receive(:jobs).at_least(1).times.and_return(NumWorkers.new(num))
   end
 
   def should_scale_workers_to(num)
-    Delayed::Workless::Scaler::HerokuCedar.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], 'worker', num)
+    updates = { "quantity": num }
+    Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['APP_NAME'], 'worker', updates)
   end
 
   def should_not_scale_workers
-    Delayed::Workless::Scaler::HerokuCedar.client.should_not_receive(:post_ps_scale)
+    Delayed::Workless::Scaler::Heroku.client.formation.should_not_receive(:update)
+  end
+
+  def if_there_are_future_jobs(_num)
+    Delayed::Workless::Scaler::Heroku.should_receive(:jobs).at_least(1).times.and_return(FutureJob.new)
   end
 end

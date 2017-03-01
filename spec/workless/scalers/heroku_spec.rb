@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Delayed::Workless::Scaler::Heroku do
+  before(:each) do
+    ENV['WORKLESS_MAX_WORKERS'] = ENV['WORKLESS_MIN_WORKERS'] = ENV['WORKLESS_WORKERS_RATIO'] = nil
+  end
+
   context 'with jobs' do
     before do
       Delayed::Workless::Scaler::Heroku.stub(:jobs).and_return(NumWorkers.new(10))
@@ -12,18 +16,19 @@ describe Delayed::Workless::Scaler::Heroku do
       end
 
       it 'should set the workers to 1' do
-        Delayed::Workless::Scaler::Heroku.client.should_receive(:put_workers).once.with(ENV['APP_NAME'], 1)
+        updates = { "quantity": 1 }
+        Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['APP_NAME'], 'worker', updates)
         Delayed::Workless::Scaler::Heroku.up
       end
     end
 
     context 'with workers' do
       before do
-        Delayed::Workless::Scaler::Heroku.stub(:workers).and_return(NumWorkers.new(10))
+        Delayed::Workless::Scaler::Heroku.stub(:workers).and_return(10)
       end
 
       it 'should not set anything' do
-        Delayed::Workless::Scaler::Heroku.client.should_not_receive(:put_workers)
+        Delayed::Workless::Scaler::Heroku.client.formation.should_not_receive(:update)
         Delayed::Workless::Scaler::Heroku.up
       end
     end
@@ -36,11 +41,11 @@ describe Delayed::Workless::Scaler::Heroku do
 
     context 'without workers' do
       before do
-        Delayed::Workless::Scaler::Heroku.stub(:workers).and_return(0)
+        Delayed::Workless::Scaler::Heroku.should_receive(:workers).and_return(0)
       end
 
       it 'should not set anything' do
-        Delayed::Workless::Scaler::Heroku.client.should_not_receive(:put_workers)
+        Delayed::Workless::Scaler::Heroku.client.formation.should_not_receive(:update)
         Delayed::Workless::Scaler::Heroku.down
       end
     end
@@ -51,7 +56,8 @@ describe Delayed::Workless::Scaler::Heroku do
       end
 
       it 'should set the workers to 0' do
-        Delayed::Workless::Scaler::Heroku.client.should_receive(:put_workers).once.with(ENV['APP_NAME'], 0)
+        updates = { "quantity": 0 }
+        Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['APP_NAME'], 'worker', updates)
         Delayed::Workless::Scaler::Heroku.down
       end
     end

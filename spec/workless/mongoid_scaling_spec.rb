@@ -6,7 +6,7 @@ describe Delayed::Mongoid::Job do
       ENV['WORKLESS_WORKERS_RATIO'] = '25'
       ENV['WORKLESS_MAX_WORKERS'] = '10'
       ENV['WORKLESS_MIN_WORKERS'] = '0'
-      Delayed::Mongoid::Job::Mock.scaler = :heroku_cedar
+      Delayed::Mongoid::Job::Mock.scaler = :heroku
     end
     context 'with no workers' do
       before(:each) do
@@ -27,7 +27,7 @@ describe Delayed::Mongoid::Job do
       it 'should not scale' do
         if_there_are_jobs 0
         should_not_scale_workers
-        Delayed::Workless::Scaler::HerokuCedar.down
+        Delayed::Workless::Scaler::Heroku.down
       end
     end
     context 'with 1 worker' do
@@ -78,14 +78,15 @@ describe Delayed::Mongoid::Job do
   private
 
   def if_there_are_jobs(num)
-    Delayed::Mongoid::Job::Mock.scaler.stub(:jobs).and_return(NumWorkers.new(num))
+    Delayed::Workless::Scaler::Heroku.should_receive(:jobs).at_least(1).times.and_return(NumWorkers.new(num))
   end
 
   def should_scale_workers_to(num)
-    Delayed::Mongoid::Job::Mock.scaler.client.should_receive(:post_ps_scale).once.with(ENV['APP_NAME'], 'worker', num)
+    updates = { "quantity": num }
+    Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['APP_NAME'], 'worker', updates)
   end
 
   def should_not_scale_workers
-    Delayed::Mongoid::Job::Mock.scaler.client.should_not_receive(:post_ps_scale)
+    Delayed::Workless::Scaler::Heroku.client.formation.should_not_receive(:update)
   end
 end

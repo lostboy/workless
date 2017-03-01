@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = 'workless_revived'
-  s.version = '1.3.0'
+  s.version = '2.0.0'
 
   s.required_rubygems_version = Gem::Requirement.new('>= 1.3.6') if s.respond_to? :required_rubygems_version=
   s.authors = ['davidakachaos']
@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.summary = 'Use delayed job workers only when theyre needed on Heroku'
 
   s.add_runtime_dependency('rails')
-  s.add_runtime_dependency('heroku-api')
+  s.add_runtime_dependency('platform-api')
   s.add_runtime_dependency('rush')
   s.add_runtime_dependency('delayed_job', ['>= 2.0.7'])
 

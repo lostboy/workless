@@ -16,11 +16,11 @@ describe Delayed::Workless::Scaler do
     context 'setting a scaler' do
       context 'with a known scaler' do
         before do
-          Delayed::ActiveRecord::Job::Mock.scaler = :heroku_cedar
+          Delayed::ActiveRecord::Job::Mock.scaler = :heroku
         end
 
         it 'should be properly assigned' do
-          Delayed::ActiveRecord::Job::Mock.scaler.should == Delayed::Workless::Scaler::HerokuCedar
+          Delayed::ActiveRecord::Job::Mock.scaler.should == Delayed::Workless::Scaler::Heroku
         end
       end
 
@@ -59,11 +59,11 @@ describe Delayed::Workless::Scaler do
     context 'setting a scaler' do
       context 'with a known scaler' do
         before do
-          Delayed::Mongoid::Job::Mock.scaler = :heroku_cedar
+          Delayed::Mongoid::Job::Mock.scaler = :heroku
         end
 
         it 'should be properly assigned' do
-          Delayed::Mongoid::Job::Mock.scaler.should == Delayed::Workless::Scaler::HerokuCedar
+          Delayed::Mongoid::Job::Mock.scaler.should == Delayed::Workless::Scaler::Heroku
         end
       end
 
@@ -102,11 +102,11 @@ describe Delayed::Workless::Scaler do
     context 'setting a scaler' do
       context 'with a known scaler' do
         before do
-          Delayed::MongoMapper::Job::Mock.scaler = :heroku_cedar
+          Delayed::MongoMapper::Job::Mock.scaler = :heroku
         end
 
         it 'should be properly assigned' do
-          Delayed::MongoMapper::Job::Mock.scaler.should == Delayed::Workless::Scaler::HerokuCedar
+          Delayed::MongoMapper::Job::Mock.scaler.should == Delayed::Workless::Scaler::Heroku
         end
       end
 

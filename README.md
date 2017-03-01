@@ -13,6 +13,7 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Updates
 
+* Version 2.0.0 Updated to use latest version of the Heroku API. Drops support for old style Heroku
 * Version 1.3.0 DROPS SUPPORT FOR OLDER RUBY AND RAILS VERSIONS!
 * Version 1.2.5 Added middleware to check on delayed jobs, fixed Rails 5 support
 * Version 1.2.4 drops support for older versions!
@@ -80,7 +81,7 @@ There are three other scalers included. Note that if you are running on the Aspe
 
 <pre>
 Delayed::Job.scaler = :heroku
-Delayed::Job.scaler = :heroku_cedar
+Delayed::Job.scaler = :heroku
 Delayed::Job.scaler = :local
 </pre>
 
