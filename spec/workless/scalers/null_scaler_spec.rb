@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 describe Delayed::Workless::Scaler::Null do
   it "should respond like a scaler" do

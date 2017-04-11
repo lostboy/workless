@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WorklessChecker
   def initialize(app)
     @app = app

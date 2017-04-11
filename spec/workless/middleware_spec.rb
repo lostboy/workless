@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'rack/mock'
 require 'rack/test'
@@ -6,7 +8,7 @@ require 'delayed_job'
 require_relative '../../lib/workless/middleware/workless_checker.rb'
 
 describe WorklessChecker do
-  let(:app) { lambda {|env| [200, {'Content-Type' => 'text/plain'}, ['OK']]} }
+  let(:app) { lambda {|_env| [200, {'Content-Type' => 'text/plain'}, ['OK']]} }
   subject { WorklessChecker.new(app) }
 
   context "when a GET request comes in" do
