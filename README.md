@@ -14,8 +14,12 @@ By adding the gem to your project and configuring our Heroku app with some confi
 :warning: **[The Legacy API will be sunset on April 15th, 2017](https://devcenter.heroku.com/changelog-items/862)** :warning:
 Please upgrade to version 2.0.0 as soon as you can. Version 2.0.0 is released on March 1st, 2017.
 
+## Heroku Stack Heroku-16 update
+Version 2.1.0 changed the config for setting the Heroku API key. This will now reside in WORKLESS_API_KEY. Please change this key in your Heroku setup when upgrading this gem!
+
 ## Updates
 
+* Version 2.1.0 CHANGE! In order to be compatible with the latest Heroku Stack (see [#11](https://github.com/davidakachaos/workless_revived/issues/11) by @unmultimedio  ) I have changed the name for the HEROKU_API_KEY variable to WORKLESS_API_KEY
 * Version 2.0.0 Updated to use latest version of the Heroku API. Drops support for old style Heroku
 * Version 1.3.0 DROPS SUPPORT FOR OLDER RUBY AND RAILS VERSIONS!
 * Version 1.2.5 Added middleware to check on delayed jobs, fixed Rails 5 support
@@ -38,6 +42,7 @@ Ruby | Rails  | Delayed Job
 ---------- | ------ | -----
 2.2.5      | 4.2    | 2.1.4
 2.3.1      | 5.0    | 4.1.2
+2.4.1      | 5.1    | 4.1.3
 
 ## Installation
 
@@ -63,7 +68,7 @@ If you don't specify delayed_job in your Gemfile workless will bring it in, most
 Add your Heroku app name / [API key](https://devcenter.heroku.com/articles/authentication) as config vars to your Heroku instance.
 
 <pre>
-heroku config:add HEROKU_API_KEY=yourapikey APP_NAME=yourherokuappname
+heroku config:add WORKLESS_API_KEY=yourapikey APP_NAME=yourherokuappname
 </pre>
 
 ## Failing Jobs

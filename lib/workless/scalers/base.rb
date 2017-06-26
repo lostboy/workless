@@ -13,7 +13,7 @@ module Delayed
 
       module HerokuClient
         def client
-          @client ||= ::PlatformAPI.connect(ENV['HEROKU_API_KEY'])
+          @client ||= ::PlatformAPI.connect(ENV['WORKLESS_API_KEY'])
         end
       end
     end
