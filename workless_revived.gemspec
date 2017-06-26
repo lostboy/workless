@@ -29,4 +29,9 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.2.5'
 
   s.add_development_dependency('rspec')
+
+  s.post_install_message = %q{
+Workless Revived 2.1.0 introduces a backwards-incompatible change!
+Please update your Heroku config to use WORKLESS_API_KEY instead of HEROKU_API_KEY!!
+}
 end
