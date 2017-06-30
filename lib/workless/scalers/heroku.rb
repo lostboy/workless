@@ -21,7 +21,7 @@ module Delayed
         end
 
         def self.workers
-          client.formation.info(ENV['APP_NAME'], 'worker')['quantity']
+          client.formation.info(ENV['APP_NAME'], 'worker')['quantity'].to_i
         end
 
         # Returns the number of workers needed based on the current number of pending jobs and the settings defined by:
