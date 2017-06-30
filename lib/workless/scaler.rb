@@ -45,7 +45,7 @@ module Delayed
 
       module ClassMethods
         def scaler
-          @scaler ||= if ENV.include?('HEROKU_API_KEY')
+          @scaler ||= if ENV.include?('WORKLESS_API_KEY')
                         Scaler::Heroku
                       else
                         Scaler::Local
