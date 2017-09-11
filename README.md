@@ -1,10 +1,8 @@
-[![Build Status](https://secure.travis-ci.org/davidakachaos/workless_revived.png?branch=master)](http://travis-ci.org/davidakachaos/workless_revived)
-[![Gem Version](https://badge.fury.io/rb/workless_revived.png)](http://badge.fury.io/rb/workless_revived)
-[![Test Coverage](https://coveralls.io/repos/davidakachaos/workless_revived/badge.png?branch=master)](https://coveralls.io/r/davidakachaos/workless_revived)
+[![Build Status](https://secure.travis-ci.org/lostboy/workless.png?branch=master)](http://travis-ci.org/lostboy/workless)
+[![Gem Version](https://badge.fury.io/rb/workless.png)](http://badge.fury.io/rb/workless)
+[![Test Coverage](https://coveralls.io/repos/lostboy/workless/badge.png?branch=master)](https://coveralls.io/r/lostboy/workless)
 
-# Workless Revived
-
-This gem was originally created by [lostboy](https://github.com/lostboy). Since he became inactive, I've decided to revive this project under a new(ish) name.
+# Workless
 
 This is an addon for delayed_job (> 2.0.0) http://github.com/collectiveidea/delayed_job
 It is designed to be used when you're using Heroku as a host and have the need to do background work with delayed job but you don't want to leave the workers running all the time as it costs money.
@@ -128,5 +126,6 @@ In this example, it will scale up to a maximum of 10 workers, firing up 1 worker
 
 Copyright (c) 2010 lostboy.
 Copyright (c) 2016 davidakachaos.
+Copyright (c) 2017 lostboy && davidakachaos.
 
 See LICENSE for details.
