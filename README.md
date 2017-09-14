@@ -9,8 +9,20 @@ It is designed to be used when you're using Heroku as a host and have the need t
 
 By adding the gem to your project and configuring our Heroku app with some config variables workless should do the rest.
 
+:warning: **[The Legacy API will be sunset on April 15th, 2017](https://devcenter.heroku.com/changelog-items/862)** :warning:
+Please upgrade to version 2.0.0 as soon as you can. Version 2.0.0 is released on March 1st, 2017.
+
+## Heroku Stack Heroku-16 update
+Version 2.1.0 changed the config for setting the Heroku API key. This will now reside in WORKLESS_API_KEY. Please change this key in your Heroku setup when upgrading this gem!
+
 ## Updates
 
+* Version 2.1.0 CHANGE! In order to be compatible with the latest Heroku Stack (see [#11](https://github.com/davidakachaos/workless_revived/issues/11) by @unmultimedio  ) I have changed the name for the HEROKU_API_KEY variable to WORKLESS_API_KEY
+* Version 2.0.0 Updated to use latest version of the Heroku API. Drops support for old style Heroku
+* Version 1.3.0 DROPS SUPPORT FOR OLDER RUBY AND RAILS VERSIONS!
+* Version 1.2.5 Added middleware to check on delayed jobs, fixed Rails 5 support
+* Version 1.2.4 drops support for older versions!
+* Version 1.2.3 replaces multiple commit callback with two callbacks for compatibility by @lostboy
 * Version 1.2.2 includes after_commit fix by @collectiveip
 * Version 1.2.1 includes support for Rails 4 & DJ 4 by @florentmorin
 * Version 1.2.0 includes new support for Sequel by @davidakachaos
@@ -22,45 +34,39 @@ By adding the gem to your project and configuring our Heroku app with some confi
 
 ## Compatibility
 
-Workless should work correctly with Rubies 1.8.7, ree, 1.9.2 and 1.9.3. It is compatible with Delayed Job since version 2.0.7 up to the latest version 3.0.1, the table below shows tested compatibility with ruby, rails and delayed_job
+Workless should work correctly with Rubies 2.0.0 and up. It is compatible with Delayed Job since version 2.0.7 up to the latest version 4.1.2, the table below shows tested compatibility with ruby, rails and delayed_job
 
 Ruby | Rails  | Delayed Job
 ---------- | ------ | -----
-1.8.7-ree  | 2.1.14 | 2.0.7
-1.9.2      | 3.2    | 2.1.4
-1.9.2      | 3.2    | 3.0.1
+2.2.5      | 4.2    | 2.1.4
+2.3.1      | 5.0    | 4.1.2
+2.4.1      | 5.1    | 4.1.3
 
 ## Installation
 
-Add the workless gem and the delayed_job gem to your project Gemfile and update your bundle. Its is recommended to specify the gem version for delayed_job especially if you are using rails 2.3.x which doesn't work with the latest delayed_job
+Add the workless gem and the delayed_job gem to your project Gemfile and update your bundle. Its is recommended to specify the gem version for delayed_job
 
-### For rails 2.3.x the latest compatible delayed_job is 2.0.7
-
-<pre>
-gem "delayed_job", "2.0.7"
-gem "workless", "~> 1.1.3"
-</pre>
-
-### For rails 3.x with delayed_job 2.1.x
-
-<pre>
-gem "delayed_job", "~> 2.1.4"
-gem "workless", "~> 1.1.3"
-</pre>
-
-### For rails 3.x with latest delayed_job 3.x using active record
+### For rails 4.x with latest delayed_job 3.x using active record
 
 <pre>
 gem "delayed_job_active_record"
-gem "workless", "~> 1.1.3"
+gem "workless_revived", "~> 1.2.4"
 </pre>
 
-If you don't specify delayed_job in your Gemfile workless will bring it in, most likely the latest version (3.0.1)
+### For rails 5.x with latest delayed_job 3.x using active record
+
+<pre>
+gem "delayed_job_active_record"
+gem "workless_revived", "~> 1.2.4"
+</pre>
+
+
+If you don't specify delayed_job in your Gemfile workless will bring it in, most likely the latest version (4.1.2)
 
 Add your Heroku app name / [API key](https://devcenter.heroku.com/articles/authentication) as config vars to your Heroku instance.
 
 <pre>
-heroku config:add HEROKU_API_KEY=yourapikey APP_NAME=yourherokuappname
+heroku config:add WORKLESS_API_KEY=yourapikey APP_NAME=yourherokuappname
 </pre>
 
 ## Failing Jobs
@@ -72,7 +78,7 @@ In the case of failed jobs Workless will only shut down the dj worker if all att
 Workless can be disabled by using the null scaler that will ignore the workers requests to scale up and down. In an environment file add this in the config block:
 
 <pre>
-config.after_initialize do 
+config.after_initialize do
   Delayed::Job.scaler = :null
 end
 </pre>
@@ -81,11 +87,11 @@ There are three other scalers included. Note that if you are running on the Aspe
 
 <pre>
 Delayed::Job.scaler = :heroku
-Delayed::Job.scaler = :heroku_cedar
+Delayed::Job.scaler = :heroku
 Delayed::Job.scaler = :local
 </pre>
 
-The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/rush to start and stop workers on a local machine. The local scaler also relies on script/delayed_job (which in turn requires the daemon gem). If you have been using foreman to run your workers, go back and see the delayed_job [setup instructions](https://github.com/collectiveidea/delayed_job/blob/master/README.md). 
+The local scaler uses @adamwiggins rush library http://github.com/adamwiggins/rush to start and stop workers on a local machine. The local scaler also relies on script/delayed_job (which in turn requires the daemon gem). If you have been using foreman to run your workers, go back and see the delayed_job [setup instructions](https://github.com/collectiveidea/delayed_job/blob/master/README.md).
 
 The heroku scaler works on the Aspen and Bamboo stacks while the heroku_cedar scaler only works on the new Cedar stack.
 
@@ -109,7 +115,7 @@ In this example, it will scale up to a maximum of 10 workers, firing up 1 worker
 - A `destroy` callback stops the worker.
 
 ## Note on Patches/Pull Requests
- 
+
 * Please fork the project.
 * Make your feature addition or bug fix.
 * Commit, do not mess with rakefile, version, or history.
@@ -118,4 +124,8 @@ In this example, it will scale up to a maximum of 10 workers, firing up 1 worker
 
 ## Copyright
 
-Copyright (c) 2010 lostboy. See LICENSE for details.
+Copyright (c) 2010 lostboy.
+Copyright (c) 2016 davidakachaos.
+Copyright (c) 2017 lostboy && davidakachaos.
+
+See LICENSE for details.
