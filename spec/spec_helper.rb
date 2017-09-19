@@ -13,7 +13,7 @@ require 'active_support'
 
 Bundler.require(:default)
 
-require 'workless_revived'
+require 'workless'
 
 module Delayed
   module ActiveRecord

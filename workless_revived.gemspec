@@ -6,18 +6,18 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = 'workless_revived'
-  s.version = '2.1.0.2'
+  s.name = 'workless'
+  s.version = '2.2.0'
 
   s.required_rubygems_version = Gem::Requirement.new('>= 1.3.6') if s.respond_to? :required_rubygems_version=
-  s.authors = ['davidakachaos']
+  s.authors = ['davidakachaos', 'lostboy']
   s.date = '2017-06-30'
   s.description = 'Extension to Delayed Job to enable workers to scale up when needed'
   s.email = 'davidakachaos@gmail.com'
 
   s.files = Dir.glob('{rails,lib}/**/*') + %w(LICENSE README.md )
 
-  s.homepage = 'http://github.com/davidakachaos/workless_revived'
+  s.homepage = 'http://github.com/lostboy/workless'
   s.require_paths = ['lib']
   s.summary = 'Use delayed job workers only when theyre needed on Heroku'
 
@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rspec')
 
   s.post_install_message = %q{
-Workless Revived 2.1.0 introduces a backwards-incompatible change!
+Workless 2.2.0 introduces a backwards-incompatible change!
 Please update your Heroku config to use WORKLESS_API_KEY instead of HEROKU_API_KEY!!
 }
 end
