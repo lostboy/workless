@@ -62,7 +62,11 @@ gem "workless", "~> 2.0.0"
 
 If you don't specify delayed_job in your Gemfile workless will bring it in, most likely the latest version (4.1.2)
 
+### IMPORTANT!
+
 Add your Heroku app name / [API key](https://devcenter.heroku.com/articles/authentication) as config vars to your Heroku instance.
+
+If you should change your Heroku password for the account on wich this API key is, IT WILL CHANGE! So if you change the password, please update the API key in the workless config to match!
 
 <pre>
 heroku config:add WORKLESS_API_KEY=yourapikey APP_NAME=yourherokuappname
