@@ -18,7 +18,7 @@ module Delayed
               self.class.scaler.down
             end
             after_commit(on: :create) do 
-              self.class.scaler.up
+              self.class.scaler.up unless Delayed::Job.scaler.jobs.empty?
             end
           end
         elsif base.to_s =~ /Sequel/
@@ -28,7 +28,7 @@ module Delayed
           end
           base.send(:define_method, 'after_create') do
             super
-            self.class.scaler.up
+            self.class.scaler.up unless Delayed::Job.scaler.jobs.empty?
           end
           base.send(:define_method, 'after_update') do
             super
@@ -37,7 +37,8 @@ module Delayed
         else
           base.class_eval do
             after_destroy 'self.class.scaler.down'
-            after_create 'self.class.scaler.up'
+            after_create 'self.class.scaler.up', unless: proc { Delayed::Job.scaler.jobs.empty? }
+
             after_update 'self.class.scaler.down', unless: proc { |r| r.failed_at.nil? }
           end
         end

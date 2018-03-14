@@ -24,7 +24,7 @@ Add your Heroku app name & [API key](https://devcenter.heroku.com/articles/authe
 heroku config:add WORKLESS_API_KEY=yourapikey APP_NAME=yourherokuappname
 </pre>
 
-If you're wanting to use `run_at` functionality add this to your `ApplicationController`;
+Lastly, add the below callback to your `ApplicationController`.
 
 <pre>
 before_action :work_off_delayed_jobs
@@ -36,22 +36,8 @@ You're good to go! Whenever a job is created Workless will automatically provisi
 ## How does Workless work?
 
 Workless activates workers in two ways;
-
-1.
-  * When a job is created, a `create` callback starts a worker.
-  * The worker runs the job, which removes it from the database.
-  * A `destroy` callback stops the worker.
-2.
-  * Upon each controller request Workless checks if workers need to be activated. This check is limited with a default timeout of 1 minute and can be configured through the `work_off_timeout` variable.
-
-
-## Failing Jobs
-
-In the case of failed jobs Workless will only shut down the DJ worker if all attempts have been tried. By default Delayed Job will try 25 times to process a job with ever increasing time delays between each unsuccessful attempt. It is recommended to set the `max_attempts` to something lower such as `3`.
-
-<pre>
-delayed::worker.max_attempts = 3
-</pre>
+1. When a job is created a callback starts a worker so long as the job is to be ran straight away or before the next check (defined by `Workless.work_off_timeout`)
+2. Upon each controller request Workless checks if workers need to be activated. This picks up scheduled or previously failed jobs.
 
 
 ## Configuration

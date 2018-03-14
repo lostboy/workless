@@ -4,7 +4,7 @@ module Workless
       # Keep a timestamp of when job queue & worker count was checked
       @@last_job_work_off_timestamp = nil
 
-      # Checks if workers need to be provisioned. Check is limited to once every 'work_off_timeout'
+      # Checks if workers need to be provisioned. Limited to once every 'work_off_timeout'
       def work_off_delayed_jobs
         return unless work_off_delayed_jobs?
 
