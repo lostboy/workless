@@ -7,72 +7,57 @@
 This is an addon for delayed_job (> 2.0.0) http://github.com/collectiveidea/delayed_job
 It is designed to be used when you're using Heroku as a host and have the need to do background work with delayed job but you don't want to leave the workers running all the time as it costs money.
 
-By adding the gem to your project and configuring our Heroku app with some config variables workless should do the rest.
-
-:warning: **[The Legacy API will be sunset on April 15th, 2017](https://devcenter.heroku.com/changelog-items/862)** :warning:
-Please upgrade to version 2.0.0 as soon as you can. Version 2.0.0 is released on March 1st, 2017.
-
-## Heroku Stack Heroku-16 update
-Version 2.2.0 changed the config for setting the Heroku API key. This will now reside in WORKLESS_API_KEY. Please change this key in your Heroku setup when upgrading this gem!
-
-## Updates
-
-* Version 2.2.0 Revitalized by @davidakachaos through his workless_revived project, now merged for a 2.2.0 release.
-* Version 1.3.0 DROPS SUPPORT FOR OLDER RUBY AND RAILS VERSIONS!
-* Version 1.2.5 Added middleware to check on delayed jobs, fixed Rails 5 support
-* Version 1.2.4 drops support for older versions!
-* Version 1.2.3 replaces multiple commit callback with two callbacks for compatibility by @lostboy
-* Version 1.2.2 includes after_commit fix by @collectiveip
-* Version 1.2.1 includes support for Rails 4 & DJ 4 by @florentmorin
-* Version 1.2.0 includes new support for Sequel by @davidakachaos
-* Version 1.1.3 includes changes by @radanskoric to reduce number of heroku api calls
-* Version 1.1.2 includes a change by @davidakachaos to scale workers using after_commit
-* Version 1.1.1 includes a fix from @filiptepper and @fixr to correctly scale workers
-* Version 1.1.0 has been released, this adds support for scaling using multiple workers thanks to @jaimeiniesta and @davidakachaos.
-* Version 1.0.0 has been released, this brings compatibility with delayed_job 3 and compatibility with Rails 2.3.x and up.
-
-## Compatibility
-
-Workless should work correctly with Rubies 2.0.0 and up. It is compatible with Delayed Job since version 2.0.7 up to the latest version 4.1.2, the table below shows tested compatibility with ruby, rails and delayed_job
-
-Ruby | Rails  | Delayed Job
----------- | ------ | -----
-2.2.5      | 4.2    | 2.1.4
-2.3.1      | 5.0    | 4.1.2
-2.4.1      | 5.1    | 4.1.3
-
 ## Installation
 
 Add the workless gem and the delayed_job gem to your project Gemfile and update your bundle. Its is recommended to specify the gem version for delayed_job
 
-### For rails 4.x with latest delayed_job 3.x using active record
-
 <pre>
 gem "delayed_job_active_record"
-gem "workless", "~> 2.2.0"
+gem 'workless', git: 'https://github.com/patricklindsay/workless.git', tag: 'v3.0.0'
 </pre>
-
-### For rails 5.x with latest delayed_job 3.x using active record
-
-<pre>
-gem "delayed_job_active_record"
-gem "workless", "~> 2.0.0"
-</pre>
-
 
 If you don't specify delayed_job in your Gemfile workless will bring it in, most likely the latest version (4.1.2)
 
-Add your Heroku app name / [API key](https://devcenter.heroku.com/articles/authentication) as config vars to your Heroku instance.
+Add your Heroku app name & [API key](https://devcenter.heroku.com/articles/authentication) as config vars to your Heroku instance.
 
 <pre>
-heroku config:add WORKLESS_API_KEY=yourapikey APP_NAME=yourherokuappname
+heroku config:add WORKLESS_API_KEY=yourapikey HEROKU_APP_NAME=yourherokuappname
 </pre>
 
-## Failing Jobs
+Lastly, add the below callback to your `ApplicationController`.
 
-In the case of failed jobs Workless will only shut down the dj worker if all attempts have been tried. By default Delayed Job will try 25 times to process a job with ever increasing time delays between each unsucessful attempt. Because of this Workless configures Delayed Job to try failed jobs only 3 times to reduce the amount of time a worker can be running while trying to process them.
+<pre>
+before_action :work_off_delayed_jobs
+</pre>
+
+You're good to go! Whenever a job is created Workless will automatically provision a workers and turn them off when all jobs are complete.
+
+
+## How does Workless work?
+
+Workless activates workers in two ways;
+1. When a job is created a callback starts a worker so long as the job is to be ran straight away or before the next check (defined by `Workless.work_off_timeout`)
+2. Upon each controller request Workless checks if workers need to be activated. This picks up scheduled or previously failed jobs.
+
 
 ## Configuration
+
+### Run At Timing
+Configure the timeout Workless uses between checking if workers are required (default is 1 minute);
+
+<pre>
+workless.work_off_timeout = 30.seconds
+</pre>
+
+### Specifying the Application
+
+You can specify what Heroku application you're using either by setting the environment variable `HEROKU_APP_NAME` or by setting configuration variable. By default this configuration variable is set to `ENV['HEROKU_APP_NAME']`
+
+<pre>
+workless.heroku_app_name = 'skynet-app'
+</pre>
+
+### Disabling
 
 Workless can be disabled by using the null scaler that will ignore the workers requests to scale up and down. In an environment file add this in the config block:
 
@@ -105,13 +90,6 @@ heroku config:add WORKLESS_WORKERS_RATIO=50
 </pre>
 
 In this example, it will scale up to a maximum of 10 workers, firing up 1 worker for every 50 jobs on the queue. The minimum will be 0 workers, but you could set it to a higher value if you want.
-
-## How does Workless work?
-
-- `Delayed::Workless::Scaler` is mixed into the `Delayed::Job` class, which adds a bunch of callbacks to it.
-- When a job is created on the database, a `create` callback starts a worker.
-- The worker runs the job, which removes it from the database.
-- A `destroy` callback stops the worker.
 
 ## Note on Patches/Pull Requests
 
