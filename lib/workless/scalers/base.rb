@@ -7,7 +7,7 @@ module Delayed
     module Scaler
       class Base
         def self.jobs
-          next_check_at = Time.now + Workless.work_off_timeout
+          next_check_at = Time.now + ::Workless.work_off_timeout
           Delayed::Job.where(failed_at: nil).where("run_at is NULL or run_at < ?", next_check_at)
         end
       end
