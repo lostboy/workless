@@ -92,7 +92,7 @@ Delayed::Mongoid::Job::Mock.send(:include, Delayed::Workless::Scaler)
 Delayed::MongoMapper::Job::Mock.send(:include, Delayed::Workless::Scaler)
 Delayed::Sequel::Job::Mock.send(:include, Delayed::Workless::Scaler)
 
-ENV['APP_NAME'] = 'TestHerokuApp'
+ENV['HEROKU_APP_NAME'] = 'TestHerokuApp'
 
 RSpec.configure do |config|
   config.expect_with(:rspec) { |c| c.syntax = :should }

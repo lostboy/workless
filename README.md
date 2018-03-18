@@ -21,7 +21,7 @@ If you don't specify delayed_job in your Gemfile workless will bring it in, most
 Add your Heroku app name & [API key](https://devcenter.heroku.com/articles/authentication) as config vars to your Heroku instance.
 
 <pre>
-heroku config:add WORKLESS_API_KEY=yourapikey APP_NAME=yourherokuappname
+heroku config:add WORKLESS_API_KEY=yourapikey HEROKU_APP_NAME=yourherokuappname
 </pre>
 
 Lastly, add the below callback to your `ApplicationController`.

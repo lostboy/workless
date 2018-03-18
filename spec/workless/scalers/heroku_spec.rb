@@ -19,7 +19,7 @@ describe Delayed::Workless::Scaler::Heroku do
 
       it 'should set the workers to 1' do
         updates = { "quantity": 1 }
-        Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['APP_NAME'], 'worker', updates)
+        Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['HEROKU_APP_NAME'], 'worker', updates)
         Delayed::Workless::Scaler::Heroku.up
       end
     end
@@ -59,7 +59,7 @@ describe Delayed::Workless::Scaler::Heroku do
 
       it 'should set the workers to 0' do
         updates = { "quantity": 0 }
-        Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['APP_NAME'], 'worker', updates)
+        Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['HEROKU_APP_NAME'], 'worker', updates)
         Delayed::Workless::Scaler::Heroku.down
       end
     end

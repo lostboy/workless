@@ -38,7 +38,7 @@ describe Delayed::Workless::Scaler::Heroku do
 
   def should_scale_workers_to(num)
     updates = { "quantity": num }
-    Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['APP_NAME'], 'worker', updates)
+    Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['HEROKU_APP_NAME'], 'worker', updates)
   end
 
   def should_not_scale_workers
