@@ -42,11 +42,22 @@ Workless activates workers in two ways;
 
 ## Configuration
 
+### Run At Timing
 Configure the timeout Workless uses between checking if workers are required (default is 1 minute);
 
 <pre>
-Workless.work_off_timeout = 30.seconds
+workless.work_off_timeout = 30.seconds
 </pre>
+
+### Specifying the Application
+
+You can specify what Heroku application you're using either by setting the environment variable `HEROKU_APP_NAME` or by setting configuration variable. By default this configuration variable is set to `ENV['HEROKU_APP_NAME']`
+
+<pre>
+workless.heroku_app_name = 'skynet-app'
+</pre>
+
+### Disabling
 
 Workless can be disabled by using the null scaler that will ignore the workers requests to scale up and down. In an environment file add this in the config block:
 

@@ -11,17 +11,17 @@ module Delayed
         def self.up
           return unless workers_needed > min_workers && workers < workers_needed
           updates = { "quantity": workers_needed }
-          client.formation.update(ENV['HEROKU_APP_NAME'], 'worker', updates)
+          client.formation.update(::Workless.heroku_app_name, 'worker', updates)
         end
 
         def self.down
           return if workers == workers_needed
           updates = { "quantity": workers_needed }
-          client.formation.update(ENV['HEROKU_APP_NAME'], 'worker', updates)
+          client.formation.update(::Workless.heroku_app_name, 'worker', updates)
         end
 
         def self.workers
-          client.formation.info(ENV['HEROKU_APP_NAME'], 'worker')['quantity'].to_i
+          client.formation.info(::Workless.heroku_app_name, 'worker')['quantity'].to_i
         end
 
         # Returns the number of workers needed based on the current number of pending jobs and the settings defined by:

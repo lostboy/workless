@@ -13,4 +13,8 @@ module Workless
   # The minimum timeout between Workless checking if jobs need to be worked
   mattr_accessor :work_off_timeout
   @@work_off_timeout = 1.minute
+
+  # The name of your Heroku application which will be scaled
+  mattr_accessor :heroku_app_name
+  @@heroku_app_name = ENV['HEROKU_APP_NAME']
 end
