@@ -46,7 +46,7 @@ Workless activates workers in two ways;
 Configure the timeout Workless uses between checking if workers are required (default is 1 minute);
 
 <pre>
-workless.work_off_timeout = 30.seconds
+Workless.work_off_timeout = 30.seconds
 </pre>
 
 ### Specifying the Application
@@ -54,7 +54,23 @@ workless.work_off_timeout = 30.seconds
 You can specify what Heroku application you're using either by setting the environment variable `HEROKU_APP_NAME` or by setting configuration variable. By default this configuration variable is set to `ENV['HEROKU_APP_NAME']`
 
 <pre>
-workless.heroku_app_name = 'skynet-app'
+Workless.heroku_app_name = 'skynet-app'
+</pre>
+
+### Heroku Error Handling
+
+By default if any error occurs when communicating with Heroku this will be raised up into the application. Although it's good to be aware of the error this may end up bringing down your application. This default behaviour can be changed by implementing a custom Heroku error handler. The example below silents the error whilst also raising it through Rollbar.
+
+```
+class MyHerokuErrorHandler
+  def self.handle(error)
+    Rollbar.error(error)
+  end
+end
+```
+
+<pre>
+Workless.heroku_error_handler = 'MyHerokuErrorHandler'
 </pre>
 
 ### Disabling

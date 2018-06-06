@@ -21,8 +21,3 @@ coverage
 rdoc
 pkg
 .rvmrc
-
-## PROJECT::SPECIFIC
-Gemfile.lock
-*.gem
-gemfiles/*.lock

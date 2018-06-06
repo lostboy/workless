@@ -13,7 +13,7 @@ module Delayed
           updates = { "quantity": workers_needed }
           client.formation.update(::Workless.heroku_app_name, 'worker', updates)
         rescue => error
-          handle_api_error(error.message)
+          handle_api_error(error)
         end
 
         def self.down
@@ -21,14 +21,11 @@ module Delayed
           updates = { "quantity": workers_needed }
           client.formation.update(::Workless.heroku_app_name, 'worker', updates)
         rescue => error
-          handle_api_error(error.message)
+          handle_api_error(error)
         end
 
         def self.workers
           client.formation.info(::Workless.heroku_app_name, 'worker')['quantity'].to_i
-        rescue => error
-          handle_api_error(error.message)
-          0
         end
 
         # Returns the number of workers needed based on the current number of pending jobs and the settings defined by:
@@ -57,8 +54,8 @@ module Delayed
           ENV['WORKLESS_MIN_WORKERS'].present? ? ENV['WORKLESS_MIN_WORKERS'].to_i : 0
         end
 
-        def self.handle_api_error(message)
-          Rails.logger.error("Workless: Error connecting to Heroku - #{message}")
+        def self.handle_api_error(error)
+          ::Workless.heroku_error_handler.constantize.handle(error)
           nil
         end
       end
