@@ -3,6 +3,7 @@
 require File.dirname(__FILE__) + '/workless/scalers/base'
 require File.dirname(__FILE__) + '/workless/scaler'
 require File.dirname(__FILE__) + '/workless/controllers/helpers'
+require File.dirname(__FILE__) + '/workless/heroku_error_handler'
 require File.dirname(__FILE__) + '/workless/railtie' if defined?(Rails::Railtie)
 
 ActiveSupport.on_load(:action_controller) do
@@ -17,4 +18,8 @@ module Workless
   # The name of your Heroku application which will be scaled
   mattr_accessor :heroku_app_name
   @@heroku_app_name = ENV['HEROKU_APP_NAME']
+
+  # Handler used when an error occurs communicating with Heroku
+  mattr_accessor :heroku_error_handler
+  @@heroku_error_handler = 'Workless::HerokuErrorHandler'
 end

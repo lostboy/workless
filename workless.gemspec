@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.2.4'
 
   s.add_development_dependency('rspec')
+  s.add_development_dependency 'pry-rails', '~> 0.3' # Debugger
 
   s.post_install_message = %q{
 Workless 2.2.0 introduces a backwards-incompatible change!

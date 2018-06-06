@@ -12,6 +12,13 @@ describe Delayed::Workless::Scaler::Heroku do
       Delayed::Workless::Scaler::Heroku.stub(:jobs).and_return(NumWorkers.new(10))
     end
 
+    context 'when an error occurs' do
+      it 'handles the error' do
+        Workless::HerokuErrorHandler.should_receive(:handle)
+        Delayed::Workless::Scaler::Heroku.up
+      end
+    end
+
     context 'without workers' do
       before do
         Delayed::Workless::Scaler::Heroku.stub(:workers).and_return(0)
