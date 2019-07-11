@@ -11,6 +11,7 @@ module Delayed
         def self.up
           return unless workers_needed > min_workers && workers < workers_needed
           updates = { "quantity": workers_needed }
+          updates[:size] = worker_size if worker_size
           client.formation.update(ENV['APP_NAME'], 'worker', updates)
         end
 
@@ -29,6 +30,7 @@ module Delayed
         # ENV['WORKLESS_WORKERS_RATIO']
         # ENV['WORKLESS_MAX_WORKERS']
         # ENV['WORKLESS_MIN_WORKERS']
+        # ENV['WORKLESS_WORKER_SIZE']
         #
         def self.workers_needed
           [[(jobs.count.to_f / workers_ratio).ceil, max_workers].min, min_workers].max
@@ -48,6 +50,10 @@ module Delayed
 
         def self.min_workers
           ENV['WORKLESS_MIN_WORKERS'].present? ? ENV['WORKLESS_MIN_WORKERS'].to_i : 0
+        end
+
+        def self.worker_size
+          ENV['WORKLESS_WORKER_SIZE'].present? ? ENV['WORKLESS_WORKER_SIZE'] : nil
         end
       end
     end
