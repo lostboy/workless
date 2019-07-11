@@ -22,6 +22,18 @@ describe Delayed::Workless::Scaler::Heroku do
         Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['APP_NAME'], 'worker', updates)
         Delayed::Workless::Scaler::Heroku.up
       end
+
+      context 'with WORKLESS_WORKER_SIZE' do
+        before do
+          ENV['WORKLESS_WORKER_SIZE'] = 'performance-l'
+        end
+
+        it 'should set the workers size to WORKLESS_WORKER_SIZE' do
+          updates = { "quantity": 1, "size": "performance-l" }
+          Delayed::Workless::Scaler::Heroku.client.formation.should_receive(:update).once.with(ENV['APP_NAME'], 'worker', updates)
+          Delayed::Workless::Scaler::Heroku.up
+        end
+      end
     end
 
     context 'with workers' do

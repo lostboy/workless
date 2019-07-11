@@ -106,6 +106,18 @@ heroku config:add WORKLESS_WORKERS_RATIO=50
 
 In this example, it will scale up to a maximum of 10 workers, firing up 1 worker for every 50 jobs on the queue. The minimum will be 0 workers, but you could set it to a higher value if you want.
 
+## Worker size
+
+By default heroku will scale using standard-1x dynos, if you wish to use a different pro dyno size use the following config variable:
+
+<pre>
+heroku config:add WORKLESS_WORKER_SIZE=performance-m
+</pre>
+
+Possible values for [dyno size](https://devcenter.heroku.com/articles/dyno-types)
+
+Note: This will not work for Hobby dynos, switch to Professional to support configuring dyno size
+
 ## How does Workless work?
 
 - `Delayed::Workless::Scaler` is mixed into the `Delayed::Job` class, which adds a bunch of callbacks to it.
